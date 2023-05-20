@@ -1,0 +1,18 @@
+# interpretor
+**/__pycache__
+
+# filesystem
+**/.DS_store
+**/.DS_Store
+**/_.*
+
+# ide
+.vscode
+.idea
+
+# env manager
+.python-version
+
+# tmp dirs
+logs
+
