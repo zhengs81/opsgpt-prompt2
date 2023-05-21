@@ -1,0 +1,262 @@
+openapi: 3.0.2
+info:
+  title: MetaCube Search
+  description: 必示科技(Bizseer)公司旗下知识图谱(MetaCube)中有海量的对象和实例，搜索服务（MetaCube Search)为寻找/匹配这些对象和实例提供搜索服务
+  version: 0.0.1
+paths:
+  /api/metacube/instancetype:
+    get:
+      summary: Search Instance Type
+      description: |-
+        对象搜索接口
+
+        输入一个实体，实体可能是对象编码或对象名称，返回最相关的对象以及总共相关的对象数量
+      operationId: search_instance_type_api_metacube_instancetype_get
+      parameters:
+        - description: 用于搜索的字符串
+          required: true
+          schema:
+            title: 查询字符串
+            type: string
+            description: 用于搜索的字符串
+          example: App
+          name: query
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceTypeRespond'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/metacube/instance:
+    get:
+      summary: Search Instance
+      description: |-
+        实例搜索接口
+
+        输入一个实体，实体可能是实例编码或实例名称，返回最相关的实例以及总共相关的实例数量
+      operationId: search_instance_api_metacube_instance_get
+      parameters:
+        - description: 用于搜索的字符串
+          required: true
+          schema:
+            title: 查询字符串
+            type: string
+            description: 用于搜索的字符串
+          example: App
+          name: query
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceRespond'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    InstanceDoc:
+      title: InstanceDoc
+      required:
+        - code
+        - name
+        - groupCode
+        - groupName
+        - instanceTypeCode
+        - instanceTypeName
+        - type
+      type: object
+      properties:
+        code:
+          title: 实力编码
+          type: string
+          description: 用于精确检索和标识唯一的实例实体的编码
+          example: 559832e8d503b2fb37225dd344b8b673
+        name:
+          title: 实例名称
+          type: string
+          description: 实例编码对应的便于理解记忆的名称
+          example: 10.0.90.83
+        groupCode:
+          title: 分组编码
+          type: string
+          description: 用于将对象、实例进行分组的编码
+          example: PAAS
+        groupName:
+          title: 分组名称
+          type: string
+          description: 分组编码对应的便于理解记忆的名称
+          example: PAAS层
+        instanceTypeCode:
+          title: 对象编码
+          type: string
+          description: 实例的类型对应的编码
+          example: ClusterCC
+        instanceTypeName:
+          title: 对象名称
+          type: string
+          description: 对象编码对应的便于理解记忆的名称
+          example: Cluster
+        type:
+          title: 实体分类
+          type: string
+          description: 实体在知识图谱的层分类，实例(Instance)，数据层(Values)中的图节点(Vertex)，可以理解为具体的实体，其类型也叫做对象(InstanceType)
+          example: instance
+    InstanceRespond:
+      title: InstanceRespond
+      required:
+        - code
+        - message
+        - results
+      type: object
+      properties:
+        code:
+          title: 状态码
+          type: integer
+          description: HTTP Restful状态码
+          example: 200
+        message:
+          title: 消息
+          type: string
+          description: 结果是否成功，失败原因，异常原因等
+          example: success
+        results:
+          title: 响应结果
+          allOf:
+            - $ref: '#/components/schemas/InstanceResult'
+          description: 搜索到的相关实例结果数据
+    InstanceResult:
+      title: InstanceResult
+      required:
+        - top5_docs
+        - hits_num
+      type: object
+      properties:
+        top5_docs:
+          title: TOP5实例搜索结果
+          type: array
+          items:
+            $ref: '#/components/schemas/InstanceDoc'
+          description: 和输入Query最相关的，排名前5的实例搜索结果
+        hits_num:
+          title: 检索总结果数量
+          type: integer
+          description: 取值大于或等于0，等于0表明没有和输入相关的结果，大于0且值比较小，例如3，表明输入比较有效，能精准匹配，值过越大说明输入越无效越模糊
+    InstanceTypeDoc:
+      title: InstanceTypeDoc
+      required:
+        - code
+        - name
+        - groupCode
+        - groupName
+        - type
+      type: object
+      properties:
+        code:
+          title: 对象编码
+          type: string
+          description: 实例的类型对应的编码
+          example: ClusterCC
+        name:
+          title: 对象名称
+          type: string
+          description: 对象编码对应的便于理解记忆的名称
+          example: Cluster
+        groupCode:
+          title: 分组编码
+          type: string
+          description: 用于将对象、实例进行分组的编码
+          example: PAAS
+        groupName:
+          title: 分组名称
+          type: string
+          description: 分组编码对应的便于理解记忆的名称
+          example: PAAS层
+        type:
+          title: 实体分类
+          type: string
+          description: 实体在知识图谱的层分类，实例(Instance)，数据层(Values)中的图节点(Vertex)，可以理解为具体的实体，其类型也叫做对象(InstanceType)
+          example: instance
+    InstanceTypeRespond:
+      title: InstanceTypeRespond
+      required:
+        - code
+        - message
+        - results
+      type: object
+      properties:
+        code:
+          title: 状态码
+          type: integer
+          description: HTTP Restful状态码
+          example: 200
+        message:
+          title: 消息
+          type: string
+          description: 结果是否成功，失败原因，异常原因等
+          example: success
+        results:
+          title: 响应结果
+          allOf:
+            - $ref: '#/components/schemas/InstanceTypeResult'
+          description: 搜索到的相关对象结果数据
+    InstanceTypeResult:
+      title: InstanceTypeResult
+      required:
+        - top5_docs
+        - hits_num
+      type: object
+      properties:
+        top5_docs:
+          title: TOP5对象搜索结果
+          type: array
+          items:
+            $ref: '#/components/schemas/InstanceTypeDoc'
+          description: 和输入Query最相关的，排名前5的对象搜索结果
+        hits_num:
+          title: 检索总结果数量
+          type: integer
+          description: 取值大于或等于0，等于0表明没有和输入相关的结果，大于0且值比较小，例如3，表明输入比较有效，能精准匹配，值过越大说明输入越无效越模糊
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string

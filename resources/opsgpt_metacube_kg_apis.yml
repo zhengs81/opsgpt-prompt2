@@ -1,0 +1,525 @@
+openapi: 3.0.1
+info:
+  title: MetaCube
+  version: last
+  description: >-
+    Metacube是一个用于存放CMDB（配置管理数据库：Configuration Management
+    Database）数据的图数据库服务，MetaCube将生产系统中的配置涉及的一些实体，也叫实例，和他们之间的关系以图的形式存储，并提供对这些实例和关系的查询、计算等接口。MetaCube涉及如下的一些概念：  
+  
+    1.
+    实例：是对应图中的节点，实例之间由关系连接。例如在一个系统中，实例可以是一台具体的机器、一个具体的容器、某个具体的集群或者某个具体的服务等等。
+  
+    2.
+    对象：是图中的一类节点的类型，或者说是实例的类型，实例的抽象概念，对应上述实例的例子，那么对象就是机器、容器、集群、服务等抽象概念、类型、分类。
+
+    3.
+    关系：对应图中的边，也可以叫做边，关系列表和边列表等价，边也有类型，一般是和图数据库的使用有关系，例如原生关系、派生关系等。边可以是包含关系，例如1个集群实例包含多个机器实例，也可以是请求关系，比如某个服务实例请求另一个服务实例，其他的关系可能还有组成、管理、依赖等等。
+servers:
+  - url: /api/meta
+tags:
+  - name: OpsGPT测试
+    description: 用于测试opsgpt能否根据用户意图进行操作的api集合
+paths:
+  /instance/{code}:
+    get:
+      tags:
+        - OpsGPT测试
+      summary: 查询实例基本信息
+      description: 输入实例编码，即`code`，查询实例的名称、所属对象、创建和更新时间
+      parameters:
+        - name: code
+          in: path
+          example: APPCC-000001
+          required: true
+          schema:
+            type: string
+          description: 实例编码，用于确定唯一的实例
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                required:
+                  - code
+                  - data
+                  - msg
+                type: object
+                properties:
+                  code:
+                    type: number
+                    example: 0
+                    description: 响应状态码，0代表正常，其他值代表异常
+                  msg:
+                    type: string
+                    example: OK
+                    description: 响应消息，表明是否成功，记录异常原因等
+                  data:
+                    required:
+                      - code
+                      - createTime
+                      - instanceTypeCode
+                      - name
+                      - updateTime
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: APPCC-000003
+                        description: 实例编码，用于确定唯一实例
+                      name:
+                        type: string
+                        example: APPCC-000003
+                        description: 实例方便记忆理解的名称
+                      instanceTypeCode:
+                        type: string
+                        example: APPCC
+                        description: 实例的类型，也叫对象
+                      createTime:
+                        type: number
+                        example: 1672106439316
+                        description: 实例信息的创建时间，单位为毫秒Unixtimestamps
+                      updateTime:
+                        type: number
+                        example: 1672106439316
+                        description: 实例信息的更新时间，单位为毫秒Unixtimestamps
+      x-codegen-request-body-name: root
+  /instance_relation:
+    get:
+      tags:
+        - OpsGPT测试
+      summary: 实例拓扑/子图查询
+      description: 用于查询实例相连的其他实例的列表，以及他们形成子图所对应邻接表的边列表
+      parameters:
+        - name: code
+          in: query
+          description: 实例编码，用于确定唯一的实例
+          example: APPCC-000002
+          required: true
+          schema:
+            type: string
+        - name: direction
+          in: query
+          description: 实例连接边的方向，默认forward，表明实例是边所连接的源节点(src)，还有可能的取值有reverse，表明实例是边所连接的目标节点(dst)，以及undirected, 表明实例即是边的目标节点，也是源节点，边所连的另一个节点也同时为src和dst
+          schema:
+            type: string
+            enum:
+              - forward
+              - reverse
+              - undirected
+            default: forward
+          example: reverse
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                required:
+                  - code
+                  - data
+                  - msg
+                type: object
+                properties:
+                  code:
+                    type: number
+                    example: 0
+                    description: 响应状态码，0代表正常，其他值代表异常
+                  msg:
+                    type: string
+                    example: OK
+                    description: 响应消息，表明是否成功，记录异常原因等
+                  data:
+                    type: object
+                    properties:
+                      instances:
+                        type: array
+                        description: 实例节点列表，也包含查询的实例点的信息
+                        items:
+                          required:
+                            - code
+                            - instanceTypeCode
+                            - instanceTypeName
+                            - name
+                          type: object
+                          description: 实例信息
+                          properties:
+                            code:
+                              type: string
+                              example: TemplateCC-000012
+                              description: 实例编码，用于确定唯一实例
+                            name:
+                              type: string
+                              example: TemplateCC-000012
+                              description: 实例方便记忆理解的名称，可能和实例编码一致
+                            instanceTypeCode:
+                              type: string
+                              example: TemplateCC
+                              description: 实例的类型，也叫对象
+                            instanceTypeName:
+                              type: string
+                              example: template
+                              description: 实例类型方便记忆理解的名称，也叫对象名称
+                      relations:
+                        type: array
+                        description: 查询得到的子图中，所有实例相连的边的列表
+                        items:
+                          required:
+                            - dst
+                            - name
+                            - src
+                            - type
+                          type: object
+                          properties:
+                            src:
+                              type: string
+                              description: 边所连接的源节点，值为实例编码
+                              example: APPCC-000002
+                            dst:
+                              type: string
+                              description: 边所连接的目标节点，值为实例编码
+                              example: TemplateCC-000014
+                            name:
+                              type: string
+                              description: 边的名称，能表明边的含义，同时便于理解和记忆的值，比如direct call，consist of
+                              example: contain
+                            type:
+                              type: string
+                              description: 边的类型，例如原生native、派生derive
+                              example: native
+  /instance_relation/batch_nodes:
+    get:
+      tags:
+        - OpsGPT测试
+      summary: 查询一批实例点之间的关系
+      description: 输入多个实例列表，查询这些实例列表之间可能存在的关系、边的列表
+      parameters:
+        - name: codes
+          in: query
+          description: 实例编码列表，用`,`逗号分隔的实例编码
+          required: true
+          example: DeployUnit-ELB_DeployUnit_2,TranCode-ELB_TranCode_2,OracleCluster-ELB_ORACLE_GROUP2
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                required:
+                  - code
+                  - data
+                  - msg
+                type: object
+                properties:
+                  code:
+                    type: number
+                    example: 0
+                    description: 响应状态码，0代表正常，其他值代表异常
+                  msg:
+                    type: string
+                    example: OK
+                    description: 响应消息，表明是否成功，记录异常原因等
+                  data:
+                    type: array
+                    description: 响应返回的关系（边）列表
+                    items:
+                      required:
+                        - dst
+                        - name
+                        - src
+                        - type
+                      type: object
+                      properties:
+                        src:
+                          type: string
+                          description: 边所连接的源节点，值为实例编码
+                          example: DeployUnit-ELB_DeployUnit_2
+                        dst:
+                          type: string
+                          description: 边所连接的目标节点，值为实例编码
+                          example: TranCode-ELB_TranCode_2
+                        name:
+                          type: string
+                          description: 边的名称，能表明边的含义，同时便于理解和记忆的值，比如direct call，consist of
+                          example: consist of
+                        type:
+                          type: string
+                          description: 边的类型，例如原生native、派生derive
+                          example: native
+  /instance_type_graph/path:
+    get:
+      tags:
+        - OpsGPT测试
+      summary: 查找指定起始对象和目的对象之间的对象路径
+      parameters:
+        - name: src
+          in: query
+          description: 起始对象编码
+          example: NameSpace
+          required: true
+          schema:
+            type: string
+        - name: dst
+          in: query
+          description: 目标对象编码
+          required: true
+          example: Pod
+          schema:
+            type: string
+        - name: steps
+          in: query
+          description: 路径的最大跳数。默认值为5，最小为1，最大不超过30
+          example: 5
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                required:
+                  - code
+                  - msg
+                  - data
+                type: object
+                properties:
+                  code:
+                    type: number
+                    example: 0
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: array
+                    items:
+                      required:
+                        - src
+                        - steps
+                      type: object
+                      properties:
+                        src:
+                          type: string
+                          description: SubSystem
+                        steps:
+                          type: array
+                          items:
+                            required:
+                              - code
+                              - relation
+                            type: object
+                            properties:
+                              code:
+                                type: string
+                                description: AP_AP
+                              relation:
+                                type: string
+                                description: deploy on
+  /instance_relation/path/with_props:
+    get:
+      tags:
+        - OpsGPT测试
+      summary: 给定实例编码，指定对象路径，查询该路径下的实例链路列表，返回值携带实例属性
+      parameters:
+        - name: code
+          in: query
+          description: 实例编码，用于确定唯一的实例
+          example: SubSystem-ELB
+          required: true
+          schema:
+            type: string
+        - name: path
+          in: query
+          required: true
+          description: 过滤对象编码路径，长度最小为1, 格式为列表，用`,`逗号分隔的对象编码
+          example: Service,Pod,NodeName
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      instances:
+                        type: array
+                        items:
+                          required:
+                            - code
+                            - instanceTypeCode
+                            - instanceTypeName
+                            - name
+                            - props
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                            name:
+                              type: string
+                            instanceTypeCode:
+                              type: string
+                            instanceTypeName:
+                              type: string
+                            props:
+                              type: object
+                              properties:
+                                unique_name:
+                                  type: string
+                                  description: 属性示例，以现场实际数据为准
+                                vertex_type:
+                                  type: string
+                                  description: 示例
+                                importance:
+                                  type: number
+                                  description: 示例
+                                vertex_id:
+                                  type: string
+                                  description: 示例
+                                name:
+                                  type: string
+                                  description: 示例
+                                kg_primary_key:
+                                  type: string
+                                  description: 示例
+                                id:
+                                  type: string
+                                  description: 示例
+                                resourceDataDate:
+                                  type: string
+                                  description: 示例
+                                node_id:
+                                  type: string
+                                  description: 示例
+                      paths:
+                        type: array
+                        items:
+                          type: array
+                          items:
+                            type: string
+  /metric/bind/{instanceTypeCode}:
+    get:
+      tags:
+        - 对象指标
+      summary: 通过对象编码查询对象拥有的指标列表
+      parameters:
+        - name: instanceTypeCode
+          in: path
+          description: 对象编码，实例类型编码，用于确定唯一对象
+          example: NameSpace
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          description: 当前页，默认1
+          example: 1
+          schema:
+            type: number
+        - name: size
+          in: query
+          required: false
+          description: 每页数量，默认10
+          example: 20
+          schema:
+            type: number
+        - name: query
+          in: query
+          required: false
+          description: 模糊搜索， 按照编码或名称
+          example: namespac
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            '*/*':
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                              description: 指标编码
+                            name:
+                              type: string
+                              description: 指标名称
+                            instanceTypeCode:
+                              type: string
+                              description: 实例类型（对象）编码
+                            collectIntervals:
+                              type: number
+                              description: 采集粒度（秒）
+                            source:
+                              type: string
+                              description: 指标来源
+                            createTime:
+                              type: number
+                            updateTime:
+                              type: number
+                            category:
+                              type: string
+                              description: 指标分类
+                            relatedMetricCodes:
+                              type: array
+                              items:
+                                type: string
+                              description: 关联的多指标
+                            dynamicInstanceTypeCode:
+                              type: array
+                              items:
+                                type: string
+                              description: 动态对象字段名
+                            instantiateRuleType:
+                              type: number
+                              description: 实例化规则类型
+                            weight:
+                              type: number
+                              description: 权重
+                          required:
+                            - code
+                            - name
+                            - instanceTypeCode
+                            - collectIntervals
+                            - source
+                            - createTime
+                            - updateTime
+                      current:
+                        type: number
+                      pageSize:
+                        type: number
+                      total:
+                        type: number
+                    required:
+                      - data
+                      - current
+                      - pageSize
+                      - total
+                required:
+                  - code
+                  - msg
+                  - data
+components: {}
