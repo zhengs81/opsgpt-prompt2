@@ -11,6 +11,10 @@ from agents.metacube import (
     name="search_toolkit"
 )
 def __search_toolkit():
+    """metacube数据搜索工具库
+
+    `resources/opsgpt_metacube_search_apis.yaml`对应的NLA工具库
+    """
     return SearchToolKit()
 
 
@@ -18,6 +22,10 @@ def __search_toolkit():
     name="metacube_toolkit"
 )
 def __metacube_toolkit():
+    """metacube知识图谱CRUD工具库
+
+    `resources/opsgpt_metacube_kg_apis.yaml`对应的NLA工具库
+    """
     return MetaCubeToolKit()
 
 
@@ -25,6 +33,7 @@ def __metacube_toolkit():
     name="search_agent_executor"
 )
 def __search_agent_executor(search_toolkit):
+    """metacube数据搜索Agent"""
     tools = search_toolkit.get_tools()
     return get_nla_agent_executor(tools)
 
@@ -33,6 +42,7 @@ def __search_agent_executor(search_toolkit):
     name="metacube_agent_executor"
 )
 def __metacube_agent_executor(metacube_toolkit):
+    """metacube知识图谱操作Agent"""
     tools = metacube_toolkit.get_tools()
     return get_nla_agent_executor(tools)
 
@@ -44,5 +54,6 @@ def __all_agent_executor(
     search_toolkit,
     metacube_toolkit
 ):
+    """metacube知识综合Agent"""
     tools = metacube_toolkit.get_tools() + search_toolkit.get_tools()
     return get_nla_agent_executor(tools)
