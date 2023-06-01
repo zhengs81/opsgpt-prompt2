@@ -3,6 +3,8 @@ info:
   title: MetaCube Search
   description: 必示科技(Bizseer)公司旗下知识图谱(MetaCube)中有海量的对象和实例，搜索服务（MetaCube Search)为寻找/匹配这些对象和实例提供搜索服务
   version: 0.0.1
+servers:
+  - url: http://10.0.70.1:8097
 paths:
   /api/metacube/instancetype:
     get:

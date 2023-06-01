@@ -1,0 +1,634 @@
+openapi: 3.0.1
+info:
+  title: 统一告警
+  description: ''
+  version: 1.0.0
+paths:
+  /api/venus/v1/alert/details/{id}:
+    get:
+      summary: 获得告警详情
+      deprecated: false
+      description: ''
+      operationId: getAlertDetailsByAlertIDUsingGET
+      parameters:
+        - name: id
+          in: path
+          description: 主键id
+          required: true
+          example: ''
+          schema:
+            type: integer
+        - name: Authorization
+          in: header
+          description: 登录token
+          required: false
+          example: Bearer {{token}}
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ResponseOfAlertVO
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2797460/apis/api-85031881-run
+  /api/venus/v1/alert/trace/{id}:
+    post:
+      summary: 获得告警轨迹
+      deprecated: false
+      description: ''
+      operationId: getAlertTraceUsingPOST
+      parameters:
+        - name: id
+          in: path
+          description: 主键id
+          required: true
+          example: ''
+          schema:
+            type: integer
+        - name: Authorization
+          in: header
+          description: 登录token
+          required: false
+          example: Bearer {{token}}
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertOpRecordSearchDTO'
+            example: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ResponseOfListOfAlertOpRecordVo
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2797460/apis/api-85031900-run
+  /api/venus/v1/analysis/record/{id}:
+    get:
+      summary: 查询分析结果
+      deprecated: false
+      description: ''
+      operationId: oneUsingGET
+      parameters:
+        - name: id
+          in: path
+          description: 配置id
+          required: true
+          example: ''
+          schema:
+            type: integer
+        - name: Authorization
+          in: header
+          description: 登录token
+          required: false
+          example: Bearer {{token}}
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ResponseOfAnalysisRecordVO
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2797460/apis/api-85032300-run
+components:
+  schemas:
+    ResponseOfAnalysisRecordVO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 错误码
+          example: 0
+        data:
+          $ref: '#/components/schemas/AnalysisRecordVO'
+        msg:
+          type: string
+          description: 错误信息
+          example: success
+      title: 响应«AnalysisRecordVO»
+      x-apifox-orders:
+        - code
+        - data
+        - msg
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    AnalysisRecordVO:
+      type: object
+      properties:
+        analysisAlertConditionDTO:
+          $ref: >-
+            #/components/schemas/TimeRangeParams
+        analysisEndTime:
+          type: integer
+          format: int64
+        analysisStartTime:
+          type: integer
+          format: int64
+        analysisStatus:
+          type: string
+        name:
+          type: string
+        report:
+          type: object
+          x-apifox-orders: []
+          properties: {}
+          x-apifox-ignore-properties: []
+        reportEndTime:
+          type: integer
+          format: int64
+        reportId:
+          type: string
+        reportStartTime:
+          type: integer
+          format: int64
+      title: AnalysisRecordVO
+      x-apifox-orders:
+        - analysisAlertConditionDTO
+        - analysisEndTime
+        - analysisStartTime
+        - analysisStatus
+        - name
+        - report
+        - reportEndTime
+        - reportId
+        - reportStartTime
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    TimeRangeParams:
+      type: object
+      properties:
+        firstOccurrenceTimeRange:
+          type: array
+          description: 时间绝对范围
+          items:
+            type: integer
+            format: int64
+        pastMinutes:
+          type: integer
+          format: int32
+          description: 过去几分钟
+        relativeInterval:
+          type: integer
+          format: int32
+          description: 相对刷新间隔
+        timeRangeTypeEnum:
+          type: string
+          description: 时间类型
+          enum:
+            - ABSOLUTE
+            - RELATIVE
+      title: 时间范围参数，没有配置不传
+      x-apifox-orders:
+        - firstOccurrenceTimeRange
+        - pastMinutes
+        - relativeInterval
+        - timeRangeTypeEnum
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    ResponseOfListOfAlertOpRecordVo:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 错误码
+          example: 0
+        data:
+          type: array
+          description: 数据
+          items:
+            $ref: '#/components/schemas/AlertOpRecordVo'
+        msg:
+          type: string
+          description: 错误信息
+          example: success
+      title: 响应«List«AlertOpRecordVo»»
+      x-apifox-orders:
+        - code
+        - data
+        - msg
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    AlertOpRecordVo:
+      type: object
+      properties:
+        alertId:
+          type: string
+        alertLevel:
+          type: integer
+          format: int32
+        alertStatus:
+          type: integer
+          format: int32
+        createTime:
+          type: integer
+          format: int64
+        createUser:
+          type: string
+        firstOccurrenceTime:
+          type: integer
+          format: int64
+        id:
+          type: string
+        opType:
+          type: integer
+          format: int32
+        processStatus:
+          type: integer
+          format: int32
+        recoveryTime:
+          type: integer
+          format: int64
+        remark:
+          type: string
+      title: AlertOpRecordVo
+      x-apifox-orders:
+        - alertId
+        - alertLevel
+        - alertStatus
+        - createTime
+        - createUser
+        - firstOccurrenceTime
+        - id
+        - opType
+        - processStatus
+        - recoveryTime
+        - remark
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    AlertOpRecordSearchDTO:
+      type: object
+      properties:
+        createTime:
+          $ref: '#/components/schemas/ConditionItemDTO'
+        createUser:
+          type: array
+          items:
+            type: string
+        opType:
+          type: array
+          items:
+            type: integer
+            format: int32
+        query:
+          type: string
+      title: AlertOpRecordSearchDTO
+      x-apifox-orders:
+        - createTime
+        - createUser
+        - opType
+        - query
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    ConditionItemDTO:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: 字段名
+        fieldOp:
+          type: string
+          description: 字段操作符
+        fieldType:
+          type: string
+          description: 字段类型
+        fieldValue:
+          type: object
+          description: 字段值
+          x-apifox-orders: []
+          properties: {}
+          x-apifox-ignore-properties: []
+      title: ConditionItemDTO
+      x-apifox-orders:
+        - fieldName
+        - fieldOp
+        - fieldType
+        - fieldValue
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    ResponseOfAlertVO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 错误码
+          example: 0
+        data:
+          $ref: '#/components/schemas/AlertVO'
+        msg:
+          type: string
+          description: 错误信息
+          example: success
+      title: 响应«告警VO»
+      x-apifox-orders:
+        - code
+        - data
+        - msg
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    AlertVO:
+      type: object
+      properties:
+        aggregationGroup:
+          type: integer
+          format: int32
+        aggregationIdentifier:
+          type: string
+        aggregationLevel:
+          type: integer
+          format: int32
+        aggregationLock:
+          type: integer
+          format: int32
+        aggregationNum:
+          type: integer
+          format: int32
+        alertKey:
+          type: string
+        alertLevel:
+          type: integer
+          format: int32
+        alertStatus:
+          type: integer
+          format: int32
+        alertValue:
+          type: string
+        business:
+          type: string
+        businessShort:
+          type: string
+        category:
+          type: string
+        closeTime:
+          type: integer
+          format: int64
+        compressGroup:
+          type: integer
+          format: int32
+        compressIdentifier:
+          type: string
+        compressLevel:
+          type: integer
+          format: int32
+        compressLock:
+          type: integer
+          format: int32
+        compressNum:
+          type: integer
+          format: int32
+        confirmDuration:
+          type: integer
+          format: int64
+        confirmTime:
+          type: integer
+          format: int64
+        createTime:
+          type: integer
+          format: int64
+        dataCenter:
+          type: string
+        dataSource:
+          type: string
+        dataType:
+          type: integer
+          format: int32
+        dimension:
+          type: string
+        firstOccurrenceTime:
+          type: integer
+          format: int64
+        flowEndTime:
+          type: integer
+          format: int64
+        flowStatus:
+          type: integer
+          format: int32
+        id:
+          type: string
+        identifier:
+          type: string
+        itsmFlag:
+          type: integer
+          format: int32
+        lastOccurrenceTime:
+          type: integer
+          format: int64
+        maintenanceFlag:
+          type: integer
+          format: int32
+        misreportFlag:
+          type: integer
+          format: int32
+        monitorObject:
+          type: string
+        node:
+          type: string
+        nodeAlias:
+          type: string
+        noticeFlag:
+          type: integer
+          format: int32
+        object:
+          type: string
+        objectClass:
+          type: string
+        occurrenceNum:
+          type: integer
+          format: int32
+        openDuration:
+          type: integer
+          format: int64
+        processDuration:
+          type: integer
+          format: int64
+        processStatus:
+          type: integer
+          format: int32
+        recoveryDuration:
+          type: integer
+          format: int64
+        recoveryTime:
+          type: integer
+          format: int64
+        reportTime:
+          type: integer
+          format: int64
+        summary:
+          type: string
+        tag:
+          type: string
+        transmissionDuration:
+          type: integer
+          format: int64
+        updateTime:
+          type: integer
+          format: int64
+        userGroup:
+          type: string
+        userName:
+          type: string
+        userRemark:
+          type: string
+      title: 告警VO
+      x-apifox-orders:
+        - aggregationGroup
+        - aggregationIdentifier
+        - aggregationLevel
+        - aggregationLock
+        - aggregationNum
+        - alertKey
+        - alertLevel
+        - alertStatus
+        - alertValue
+        - business
+        - businessShort
+        - category
+        - closeTime
+        - compressGroup
+        - compressIdentifier
+        - compressLevel
+        - compressLock
+        - compressNum
+        - confirmDuration
+        - confirmTime
+        - createTime
+        - dataCenter
+        - dataSource
+        - dataType
+        - dimension
+        - firstOccurrenceTime
+        - flowEndTime
+        - flowStatus
+        - id
+        - identifier
+        - itsmFlag
+        - lastOccurrenceTime
+        - maintenanceFlag
+        - misreportFlag
+        - monitorObject
+        - node
+        - nodeAlias
+        - noticeFlag
+        - object
+        - objectClass
+        - occurrenceNum
+        - openDuration
+        - processDuration
+        - processStatus
+        - recoveryDuration
+        - recoveryTime
+        - reportTime
+        - summary
+        - tag
+        - transmissionDuration
+        - updateTime
+        - userGroup
+        - userName
+        - userRemark
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+servers:
+  - url: http://10.0.80.239:8088
+    description: 风险中心
