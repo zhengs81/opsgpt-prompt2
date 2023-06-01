@@ -15,15 +15,10 @@ info:
     3.
     关系：对应图中的边，也可以叫做边，关系列表和边列表等价，边也有类型，一般是和图数据库的使用有关系，例如原生关系、派生关系等。边可以是包含关系，例如1个集群实例包含多个机器实例，也可以是请求关系，比如某个服务实例请求另一个服务实例，其他的关系可能还有组成、管理、依赖等等。
 servers:
-  - url: /api/meta
-tags:
-  - name: OpsGPT测试
-    description: 用于测试opsgpt能否根据用户意图进行操作的api集合
+  - url: http://10.0.90.77:7010/api/meta
 paths:
   /instance/{code}:
     get:
-      tags:
-        - OpsGPT测试
       summary: 查询实例基本信息
       description: 输入实例编码，即`code`，查询实例的名称、所属对象、创建和更新时间
       parameters:
@@ -86,8 +81,6 @@ paths:
       x-codegen-request-body-name: root
   /instance_relation:
     get:
-      tags:
-        - OpsGPT测试
       summary: 实例拓扑/子图查询
       description: 用于查询实例相连的其他实例的列表，以及他们形成子图所对应邻接表的边列表
       parameters:
@@ -189,8 +182,6 @@ paths:
                               example: native
   /instance_relation/batch_nodes:
     get:
-      tags:
-        - OpsGPT测试
       summary: 查询一批实例点之间的关系
       description: 输入多个实例列表，查询这些实例列表之间可能存在的关系、边的列表
       parameters:
@@ -250,8 +241,6 @@ paths:
                           example: native
   /instance_type_graph/path:
     get:
-      tags:
-        - OpsGPT测试
       summary: 查找指定起始对象和目的对象之间的对象路径
       parameters:
         - name: src
@@ -319,8 +308,6 @@ paths:
                                 description: deploy on
   /instance_relation/path/with_props:
     get:
-      tags:
-        - OpsGPT测试
       summary: 给定实例编码，指定对象路径，查询该路径下的实例链路列表，返回值携带实例属性
       parameters:
         - name: code
@@ -409,8 +396,6 @@ paths:
                             type: string
   /metric/bind/{instanceTypeCode}:
     get:
-      tags:
-        - 对象指标
       summary: 通过对象编码查询对象拥有的指标列表
       parameters:
         - name: instanceTypeCode

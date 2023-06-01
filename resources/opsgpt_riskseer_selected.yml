@@ -1,0 +1,395 @@
+openapi: 3.0.1
+info:
+  title: opsgpt_riskseer_selected
+  description: 'riskseer opsgpt selected api collection'
+  version: 1.0.0
+paths:
+  /api/risk-seer-service/v1/inspection/item/add:
+    post:
+      summary: 检查项新建
+      deprecated: false
+      description: ''
+      operationId: addInspectionItemUsingPOST
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InspectionItemAddRequestVO'
+            example: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestMessage'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2814249/apis/api-85882380-run
+  /api/risk-seer-service/v1/inspection/item/fetch:
+    get:
+      summary: 根据ID查询检查项详情
+      deprecated: false
+      description: ''
+      operationId: getInspectionItemByIdUsingGET
+      parameters:
+        - name: id
+          in: query
+          description: id
+          required: true
+          example: ''
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestMessage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2814249/apis/api-85882385-run
+  /api/risk-seer-service/v1/task/execute:
+    post:
+      summary: 手动任务执行
+      deprecated: false
+      description: ''
+      operationId: executeUsingPOST_2
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskExecuteVO'
+            example: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestMessage'
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2814249/apis/api-85882468-run
+components:
+  schemas:
+    TaskExecuteVO:
+      title: TaskExecuteVO
+      required:
+        - id
+      type: object
+      properties:
+        compareReferenceTime:
+          type: integer
+          format: int64
+        endChangeTime:
+          type: integer
+          format: int64
+        id:
+          type: integer
+          format: int32
+        inspectionTime:
+          type: integer
+          format: int64
+        startChangeTime:
+          type: integer
+          format: int64
+      x-apifox-orders:
+        - compareReferenceTime
+        - endChangeTime
+        - id
+        - inspectionTime
+        - startChangeTime
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    RestMessage:
+      title: RestMessage
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        results:
+          type: object
+          x-apifox-orders: []
+          properties: {}
+          x-apifox-ignore-properties: []
+      x-apifox-orders:
+        - code
+        - message
+        - results
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    InspectionItemAddRequestVO:
+      title: InspectionItemAddRequestVO
+      type: object
+      properties:
+        algoParam:
+          type: object
+          additionalProperties:
+            type: object
+            x-apifox-orders: []
+          description: 算法参数,计算规则类型为算法时用,json格式
+          x-apifox-orders: []
+          properties: {}
+          x-apifox-ignore-properties: []
+        bizParam:
+          type: object
+          additionalProperties:
+            type: object
+            x-apifox-orders: []
+          description: 业务参数,计算规则类型为算法时用,json格式
+          x-apifox-orders: []
+          properties: {}
+          x-apifox-ignore-properties: []
+        calculateRuleId:
+          type: integer
+          description: 计算规则ID
+          format: int32
+        exceptionLevels:
+          type: array
+          description: 异常权重
+          items:
+            $ref: '#/components/schemas/ExceptionLevelVO'
+        inspectionItemName:
+          type: string
+          description: 检查项名称
+        inspectionItemType:
+          type: integer
+          description: >-
+            检查项分类,1应用，2操作系统，3数据库，4中间件，5存储，6网络，7安全风险，8工具环境、9运维工具。字典表编码——INSPECTION_ITEM_TYPE
+          format: int32
+        inspectionValueType:
+          type: integer
+          description: 检测值类型:1、数值;2、状态;3、关键字;字典表编码——INSPECTION_VALUE_TYPE
+          format: int32
+        metricCode:
+          type: string
+          description: 指标编码
+        metricId:
+          type: string
+          description: 指标Id
+        metricInstanceTypeCode:
+          type: string
+          description: 指标对象编码
+        metricInstanceTypeName:
+          type: string
+          description: 指标对象名称
+        metricName:
+          type: string
+          description: 指标名称
+        parseScriptRules:
+          type: array
+          description: 解析脚本规则,json格式
+          items:
+            type: object
+            x-apifox-orders: []
+            properties: {}
+            x-apifox-ignore-properties: []
+        priority:
+          type: integer
+          description: 重要性类别
+          format: int32
+        publishStatus:
+          type: integer
+          description: 发布状态，0:暂存，3:发布
+          format: int32
+        remark:
+          type: string
+          description: 备注
+        ruleExtendableContents:
+          type: array
+          description: 规则扩展字段列表
+          items:
+            $ref: '#/components/schemas/RuleExtendableVO'
+        rulesDataConfig:
+          type: array
+          description: 后端需要-规则组-用于转化模板,json格式
+          items:
+            type: object
+            x-apifox-orders: []
+            properties: {}
+            x-apifox-ignore-properties: []
+        rulesViewConfig:
+          type: array
+          description: 前端展示-规则组,json格式
+          items:
+            type: object
+            x-apifox-orders: []
+            properties: {}
+            x-apifox-ignore-properties: []
+        strategyId:
+          type: integer
+          description: 策略ID
+          format: int32
+        strategyTemplateId:
+          type: integer
+          description: 当前策略关联的策略模板ID
+          format: int32
+        tags:
+          type: array
+          description: 检查项标签
+          items:
+            type: string
+      description: 新建检查项请求实体
+      x-apifox-orders:
+        - algoParam
+        - bizParam
+        - calculateRuleId
+        - exceptionLevels
+        - inspectionItemName
+        - inspectionItemType
+        - inspectionValueType
+        - metricCode
+        - metricId
+        - metricInstanceTypeCode
+        - metricInstanceTypeName
+        - metricName
+        - parseScriptRules
+        - priority
+        - publishStatus
+        - remark
+        - ruleExtendableContents
+        - rulesDataConfig
+        - rulesViewConfig
+        - strategyId
+        - strategyTemplateId
+        - tags
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    RuleExtendableVO:
+      title: RuleExtendableVO
+      type: object
+      properties:
+        extendableContent:
+          type: string
+          description: 扩展字段
+        ruleType:
+          type: integer
+          description: 规则类型
+          format: int32
+      description: 规则扩展对象
+      x-apifox-orders:
+        - extendableContent
+        - ruleType
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    ExceptionLevelVO:
+      title: ExceptionLevelVO
+      type: object
+      properties:
+        level:
+          type: integer
+          description: 异常等级
+          format: int32
+        value:
+          type: number
+          description: 异常权重值
+          format: float
+      description: 异常权重对象
+      x-apifox-orders:
+        - level
+        - value
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+servers:
+  - url: http://10.0.80.238:9002
+    description: Develop Env
