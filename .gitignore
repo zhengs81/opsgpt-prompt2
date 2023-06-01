@@ -9,6 +9,7 @@
 # ide
 .vscode
 .idea
+target
 
 # env manager
 .python-version
