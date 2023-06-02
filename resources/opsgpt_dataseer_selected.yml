@@ -1,0 +1,712 @@
+openapi: 3.0.1
+info:
+  title: 数据平台管理服务_dataplat-backendservice
+  description: ''
+  version: 1.0.0
+servers:
+  - url: http://gateway.dev.bizseer.com
+paths:
+  /api/metrics-center/v1/metrics/timeseries:
+    post:
+      summary: 指标时序数据查询
+      deprecated: false
+      description: ''
+      parameters:
+        - name: Authorization
+          in: header
+          description: ''
+          example: '{{AUTH_TOKEN}}'
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentPage:
+                  type: integer
+                pageSize:
+                  type: string
+                data:
+                  type: object
+                  properties:
+                    startTime:
+                      type: number
+                      title: 开始时间(ms)
+                    endTime:
+                      title: 结束时间(ms)
+                      type: number
+                    granularity:
+                      type: integer
+                      title: 聚合粒度(s)
+                    queries:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                            title: query的唯一标识
+                            description: 为避免query条件重复,设置唯一key,推荐传A,B,C大写字母
+                          metricCode:
+                            type: string
+                            title: 指标code
+                          measurementName:
+                            type: string
+                          aggregationRule:
+                            type: string
+                            title: 聚合规则
+                            description: AVG,MIN,MAX,SUM
+                          aggregationDimensions:
+                            type: array
+                            items:
+                              type: string
+                            title: 维度code 列表
+                          dimensionFilters:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                dimensionCode:
+                                  type: string
+                                  title: 维度code
+                                op:
+                                  type: string
+                                  title: 运算规则
+                                  description: EQ,NEQ,IN,NOTIN
+                                dimensionValues:
+                                  type: array
+                                  items:
+                                    type: string
+                                  title: 维度值列表
+                              x-apifox-orders:
+                                - dimensionCode
+                                - op
+                                - dimensionValues
+                              required:
+                                - dimensionCode
+                                - op
+                                - dimensionValues
+                              x-apifox-ignore-properties: []
+                          derivedRules:
+                            type: object
+                            properties:
+                              derivedType:
+                                type: string
+                                title: 函数类型
+                                description: 时间平移 TIME_SHIFT_1H, TIME_SHIFT_1D, TIME_SHIFT_1W, TIME_SHIFT_4W; 增量:VALUE_DIFF; 滚动聚合:ROLLUP; 滑动聚合:MOVING_ROLLUP; 同比:YOY; 环比:MOM;
+                              timeShiftSeconds:
+                                title: 平移时间(s)
+                                type: number
+                              derivedAggregationRule:
+                                type: string
+                                title: 聚合规则
+                              derivedGranularity:
+                                title: 聚合粒度(秒)
+                                type: integer
+                              timeWindow:
+                                title: 滚动/滑动 聚合窗口长度
+                                type: integer
+                              unit:
+                                type: string
+                                title: 窗口长度对应的时间单位
+                            title: 公式
+                            x-apifox-orders:
+                              - derivedType
+                              - timeShiftSeconds
+                              - derivedAggregationRule
+                              - derivedGranularity
+                              - timeWindow
+                              - unit
+                            required:
+                              - derivedType
+                              - timeShiftSeconds
+                              - derivedAggregationRule
+                              - derivedGranularity
+                              - unit
+                              - timeWindow
+                            x-apifox-ignore-properties: []
+                        x-apifox-orders:
+                          - key
+                          - metricCode
+                          - measurementName
+                          - aggregationRule
+                          - aggregationDimensions
+                          - dimensionFilters
+                          - derivedRules
+                        required:
+                          - metricCode
+                          - measurementName
+                          - aggregationRule
+                        x-apifox-ignore-properties: []
+                  x-apifox-orders:
+                    - startTime
+                    - endTime
+                    - granularity
+                    - queries
+                  required:
+                    - startTime
+                    - endTime
+                    - granularity
+                    - queries
+                  x-apifox-ignore-properties: []
+              x-apifox-orders:
+                - currentPage
+                - pageSize
+                - data
+              required:
+                - currentPage
+                - pageSize
+                - data
+              x-apifox-ignore-properties: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                    nullable: true
+                  errDetail:
+                    type: string
+                    nullable: true
+                  data:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      pageSize:
+                        type: integer
+                      totalRecord:
+                        title: 总条数
+                        type: integer
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              type: string
+                              title: 唯一键
+                              description: A：指标：维度
+                            metriCode:
+                              type: string
+                              title: 指标code
+                            metricNameCn:
+                              type: string
+                              title: 指标中文名
+                            measurementName:
+                              type: string
+                              title: measurementName
+                            dimensionSeries:
+                              type: string
+                              title: 维度KV,逗号拼接
+                              description: 如 :ip=10.0.100.1,host=hostname001
+                            derivedType:
+                              type: string
+                              title: 衍生指标类型
+                            times:
+                              type: array
+                              items:
+                                type: number
+                              title: 时间戳数组(X轴)
+                            values:
+                              type: array
+                              items:
+                                type: number
+                              title: 维度对应的指标值
+                              description: 指标值在某个时间点不存在的话会补null
+                          x-apifox-orders:
+                            - key
+                            - metriCode
+                            - metricNameCn
+                            - measurementName
+                            - dimensionSeries
+                            - derivedType
+                            - times
+                            - values
+                          required:
+                            - metriCode
+                            - measurementName
+                            - dimensionSeries
+                            - values
+                            - metricNameCn
+                            - key
+                            - times
+                          x-apifox-ignore-properties: []
+                    x-apifox-orders:
+                      - currentPage
+                      - pageSize
+                      - totalRecord
+                      - items
+                    required:
+                      - currentPage
+                      - pageSize
+                      - items
+                      - totalRecord
+                    x-apifox-ignore-properties: []
+                x-apifox-orders:
+                  - code
+                  - msg
+                  - errDetail
+                  - data
+                required:
+                  - code
+                  - msg
+                  - errDetail
+                  - data
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/1526839/apis/api-37155809-run
+  /api/dataplat-backendservice/portal/metric/data_serve_list/{metricId}:
+    get:
+      summary: 指标资产-服务列表
+      deprecated: false
+      description: ''
+      operationId: findMetricDataServeListUsingGET
+      parameters:
+        - name: metricId
+          in: path
+          description: 指标id
+          required: true
+          example: ''
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ResponseOfListOfPortalSerice
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/1516247/apis/api-36566476-run
+  /api/dataplat-backendservice/portal/metric/basic-info:
+    post:
+      summary: 门户-指标基本信息
+      deprecated: false
+      description: ''
+      operationId: basicInfoUsingPOST_1
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MetricBaseQuery'
+            example: ''
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/ResponseOfPortalBasicInfo
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/1516247/apis/api-71346900-run
+components:
+  schemas:
+    ResponseOfPortalBasicInfo:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 状态值：0-成功，1-失败(常规业务)，2-失败(数据冲突)
+        data:
+          $ref: '#/components/schemas/PortalBasicInfo'
+        errDetail:
+          type: string
+          description: 错误详细信息，code!=0时供debug查看
+        msg:
+          type: string
+          description: 提示信息，code!=0时供前端显示
+      title: 接口返回对象«PortalBasicInfo»
+      x-apifox-orders:
+        - code
+        - data
+        - errDetail
+        - msg
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    PortalBasicInfo:
+      type: object
+      properties:
+        bizCategoryNames:
+          type: array
+          items:
+            type: string
+        businessSystemTitle:
+          type: string
+        createTime:
+          type: integer
+          format: int64
+        createUser:
+          type: string
+        createUserGroup:
+          type: string
+        dimensions:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricDimensionBeanOut'
+        granularity:
+          type: string
+        levelName:
+          type: string
+        measurementName:
+          type: string
+        metricCategory:
+          type: string
+        metricCode:
+          type: string
+        metricId:
+          type: integer
+          format: int32
+        metricNameCn:
+          type: string
+        metricSource:
+          type: string
+        modelName:
+          type: string
+        reserve:
+          type: string
+        statisticalCaliber:
+          type: string
+        unit:
+          type: string
+        updateTime:
+          type: integer
+          format: int64
+        updateUser:
+          type: string
+      title: PortalBasicInfo
+      x-apifox-orders:
+        - bizCategoryNames
+        - businessSystemTitle
+        - createTime
+        - createUser
+        - createUserGroup
+        - dimensions
+        - granularity
+        - levelName
+        - measurementName
+        - metricCategory
+        - metricCode
+        - metricId
+        - metricNameCn
+        - metricSource
+        - modelName
+        - reserve
+        - statisticalCaliber
+        - unit
+        - updateTime
+        - updateUser
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    MetricDimensionBeanOut:
+      type: object
+      properties:
+        dimensionCode:
+          type: string
+        dimensionNameCn:
+          type: string
+      title: MetricDimensionBeanOut
+      x-apifox-orders:
+        - dimensionCode
+        - dimensionNameCn
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    MetricBaseQuery:
+      type: object
+      properties:
+        measurementName:
+          type: string
+        metricCode:
+          type: string
+      title: MetricBaseQuery
+      x-apifox-orders:
+        - measurementName
+        - metricCode
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    ResponseOfListOfPortalSerice:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 状态值：0-成功，1-失败(常规业务)，2-失败(数据冲突)
+        data:
+          type: array
+          description: 业务数据
+          items:
+            $ref: >-
+              #/components/schemas/PortalService
+        errDetail:
+          type: string
+          description: 错误详细信息，code!=0时供debug查看
+        msg:
+          type: string
+          description: 提示信息，code!=0时供前端显示
+      title: 接口返回对象«List«门户数据服务»»
+      x-apifox-orders:
+        - code
+        - data
+        - errDetail
+        - msg
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    PortalService:
+      type: object
+      properties:
+        apiInfo:
+          $ref: '#/components/schemas/APIInfo'
+        created:
+          type: integer
+          format: int64
+          description: 创建时间
+        dataServeGrantPortalViewList:
+          type: array
+          description: 授权列表
+          items:
+            $ref: >-
+              #/components/schemas/PortalServiceAuthList
+        groupId:
+          type: integer
+          format: int32
+          description: 组id
+        groupName:
+          type: string
+          description: 组名字
+        id:
+          type: integer
+          format: int32
+          description: 数据服务id
+        metricServeTypeCode:
+          type: integer
+          format: int32
+          description: 指标请求类型 1.指定指标服务 2.公共服务
+        metricServeTypeTitle:
+          type: string
+          description: 指标服务类型名
+        name:
+          type: string
+          description: 数据服务名字
+        reqTypeCode:
+          type: integer
+          format: int32
+          description: 请求类型 1GET 2POST
+        reqTypeTitle:
+          type: string
+          description: 请求类型名字
+        statusCode:
+          type: integer
+          format: int32
+          description: 状态 0已下线 1已上线
+        statusTitle:
+          type: string
+          description: 状态名字
+        updated:
+          type: integer
+          format: int64
+          description: 更新时间
+      title: 门户数据服务
+      description: 门户数据服务
+      x-apifox-orders:
+        - apiInfo
+        - created
+        - dataServeGrantPortalViewList
+        - groupId
+        - groupName
+        - id
+        - metricServeTypeCode
+        - metricServeTypeTitle
+        - name
+        - reqTypeCode
+        - reqTypeTitle
+        - statusCode
+        - statusTitle
+        - updated
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    PortalServiceAuthList:
+      type: object
+      properties:
+        appKey:
+          type: string
+          description: 应用Key
+        grantTimeEnd:
+          type: integer
+          format: int64
+          description: 授权结束时间
+        grantTimeStart:
+          type: integer
+          format: int64
+          description: 授权开始时间
+        permanent:
+          type: boolean
+          description: 永久授权
+      title: 门户数据服务授权列表
+      description: 门户数据服务授权列表
+      x-apifox-orders:
+        - appKey
+        - grantTimeEnd
+        - grantTimeStart
+        - permanent
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    APIInfo:
+      type: object
+      properties:
+        accessMethod:
+          type: string
+          description: body访问的时候，传参方式
+        reqInfos:
+          type: array
+          description: 请求参数信息列表
+          items:
+            $ref: >-
+              #/components/schemas/RequestParamsList
+        reqMethod:
+          type: string
+          description: 请求方法
+        resultInfos:
+          type: array
+          description: 返回结果信息列表
+          items:
+            $ref: >-
+              #/components/schemas/ResponseResultList
+        urls:
+          type: array
+          description: url列表
+          items:
+            type: string
+      title: api信息
+      description: api信息
+      x-apifox-orders:
+        - accessMethod
+        - reqInfos
+        - reqMethod
+        - resultInfos
+        - urls
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    ResponseResultList:
+      type: object
+      properties:
+        comment:
+          type: string
+          description: 备注
+        name:
+          type: string
+          description: 名字
+      title: 返回结果信息列表
+      description: 返回结果信息列表
+      x-apifox-orders:
+        - comment
+        - name
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas
+    RequestParamsList:
+      type: object
+      properties:
+        comment:
+          type: string
+          description: 备注
+        name:
+          type: string
+          description: 名字
+        required:
+          type: boolean
+          description: 是否必须
+        type:
+          type: string
+          description: 类型
+        typeDesc:
+          type: string
+          description: 类型排序
+      title: 请求参数信息列表
+      description: 请求参数信息列表
+      x-apifox-orders:
+        - comment
+        - name
+        - required
+        - type
+        - typeDesc
+      x-apifox-ignore-properties: []
+      x-apifox-folder: Schemas

@@ -71,7 +71,7 @@ class SearchToolkit(BizseerToolkit):
 
     @staticmethod
     def spec_path() -> Path | str:
-        return RESOURECE_PATH.joinpath("opsgpt_searcher.yaml")
+        return RESOURECE_PATH.joinpath("opsgpt_searcher.yml")
 
 
 class RiskseerToolkit(BizseerToolkit):
@@ -106,7 +106,7 @@ class TicketseerToolkit(BizseerToolkit):
         return RESOURECE_PATH.joinpath("opsgpt_ticketseer_selected.yml")
 
 
-class OpsGptAgent(AgentExecutor):
+class OpsGPTAgent(AgentExecutor):
     @classmethod
     def from_llm_and_tools(
         cls,

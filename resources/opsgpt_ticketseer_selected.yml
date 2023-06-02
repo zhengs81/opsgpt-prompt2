@@ -1,0 +1,564 @@
+openapi: 3.0.1
+info:
+  title: 异常森林
+  description: ''
+  version: 1.0.0
+servers:
+  - url: http://gw.dev.bizseer.com
+paths:
+  /api/forest/v1/failure/manual/silent:
+    put:
+      summary: 创建静默手动排障任务-单实例-广发
+      deprecated: false
+      description: ''
+      parameters:
+        - name: Content-Type
+          in: header
+          description: ''
+          required: true
+          example: application/json
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startTime:
+                  type: number
+                  description: 排查的开始时间
+                lastTime:
+                  type: number
+                  description: 排查的结束时间
+                instanceTypeCode:
+                  type: string
+                  description: 对象编码
+                instanceCode:
+                  type: string
+                  description: 实例Code
+                eventTypeList:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        description: 事件ID
+                      name:
+                        type: string
+                        description: 事件名称
+                    required:
+                      - id
+                      - name
+                    x-apifox-orders:
+                      - id
+                      - name
+                    x-apifox-ignore-properties: []
+                  description: 排查事件列表
+                description:
+                  type: string
+                  description: 排障备注
+              required:
+                - startTime
+                - lastTime
+                - instanceCode
+              x-apifox-orders:
+                - startTime
+                - lastTime
+                - instanceTypeCode
+                - instanceCode
+                - eventTypeList
+                - description
+              x-apifox-ignore-properties: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        description: 故障编码
+                    required:
+                      - code
+                    x-apifox-orders:
+                      - code
+                    x-apifox-ignore-properties: []
+                x-apifox-orders:
+                  - code
+                  - msg
+                  - data
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85579837-run
+  /api/forest/v1/failure/info/{code}:
+    get:
+      summary: 根据疑似故障编码code【唯一标识】，查询疑似故障详情
+      deprecated: false
+      description: ''
+      parameters:
+        - name: code
+          in: path
+          description: 疑似故障编码
+          required: true
+          example: INC202205091115540000
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                title: empty object
+                properties:
+                  code:
+                    type: integer
+                    description: "成功返回200\t"
+                  msg:
+                    type: string
+                    description: "成功返回OK，失败返回原因\t"
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        description: 故障ID
+                      code:
+                        type: string
+                        description: 故障编码
+                      severity:
+                        type: string
+                        description: '故障等级， 1: 通知，2: 警告，3: 次要，4: 主要，5: 紧急'
+                      description:
+                        type: string
+                        description: "故障描述\t"
+                      "startTime\t":
+                        type: string
+                        description: "故障开始时间, 单位ms\t"
+                      lastTime:
+                        type: string
+                        description: "故障更新时间, 单位ms\t"
+                      status:
+                        type: integer
+                        description: 故障状态， 0表示创建，1表示进行中，2表示关闭态
+                      businessImpactAnalysisReportCode:
+                        type: string
+                        description: "业务影响分析编码\t"
+                      "rootCauseAnalysisReportCode\t":
+                        type: string
+                        description: "疑似根因分析编码\t"
+                      "applicationTraceReportCode\t":
+                        type: string
+                        description: "调用链报告编码\t"
+                      mitigationReportCode:
+                        type: string
+                        description: "止损推荐报告编码\t"
+                      alertCount:
+                        type: number
+                        description: 关联告警数量
+                      businessImpactDescription:
+                        type: string
+                        description: 业务影响分析描述
+                      businessImpactStatus:
+                        type: integer
+                        description: 业务影响分析状态
+                      rootCauseDescription:
+                        type: string
+                        description: 疑似根因分析描述
+                      rootCauseStatus:
+                        type: integer
+                        description: 疑似根因分析状态
+                      manualStartTime:
+                        type: number
+                        description: 手动排障开始时间
+                      manualLastTime:
+                        type: number
+                        description: 手动排障结束时间
+                      instanceTypeGroupCode:
+                        type: string
+                        description: 对象分组编码，必需
+                      instanceTypeGroupName:
+                        type: string
+                        description: 对象分组，必需
+                      instanceTypeId:
+                        type: integer
+                        description: 对象id，必需
+                      instanceTypeCode:
+                        type: string
+                        description: 对象编码，必需
+                      instanceTypeName:
+                        type: string
+                        description: 对象名称，必需
+                      eventTypeId:
+                        type: integer
+                        description: 事件类型的唯一 ID ，必需
+                      eventTypeName:
+                        type: string
+                        description: 事件名称，手动填写，必需
+                      manualDescription:
+                        type: string
+                        description: 手动排障描述：用户输入
+                      manualStatus:
+                        type: string
+                        description: 未执行、执行中、完成、失败；
+                      generationType:
+                        type: integer
+                        description: 排障类型
+                      eventTypeList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: 事件类型的唯一 ID ，自增生成，必需
+                            name:
+                              type: string
+                              description: 事件名称
+                          required:
+                            - id
+                            - name
+                          x-apifox-orders:
+                            - id
+                            - name
+                          x-apifox-ignore-properties: []
+                        description: 排障事件列表
+                      manualExecuteStartTime:
+                        type: number
+                        description: 手动排障执行开始时间
+                      manualExecuteLastTime:
+                        type: number
+                        description: 手动排障执行结束时间
+                      labelIds:
+                        type: array
+                        items:
+                          type: integer
+                          description: 故障标签ID
+                        description: 故障标签ID列表
+                      failureApplications:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            instanceCode:
+                              type: string
+                            instanceName:
+                              type: string
+                          required:
+                            - instanceCode
+                            - instanceName
+                          x-apifox-orders:
+                            - instanceCode
+                            - instanceName
+                          x-apifox-ignore-properties: []
+                        description: 故障所属应用
+                      belongApplication:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            instanceCode:
+                              type: string
+                              description: 故障所属应用编码
+                            instanceName:
+                              type: string
+                              description: 故障所属应用名称
+                          required:
+                            - instanceCode
+                            - instanceName
+                          x-apifox-orders:
+                            - instanceCode
+                            - instanceName
+                          x-apifox-ignore-properties: []
+                        description: 故障所属应用【请使用这个，做兼容通用】
+                      failedCause:
+                        type: string
+                        description: 故障分析失败原因
+                    description: "返回信息\t"
+                    required:
+                      - id
+                      - lastTime
+                      - "startTime\t"
+                      - description
+                      - severity
+                      - businessImpactAnalysisReportCode
+                      - status
+                      - mitigationReportCode
+                      - "applicationTraceReportCode\t"
+                      - "rootCauseAnalysisReportCode\t"
+                      - code
+                      - alertCount
+                      - rootCauseDescription
+                      - businessImpactStatus
+                      - businessImpactDescription
+                      - rootCauseStatus
+                      - instanceTypeName
+                      - instanceTypeCode
+                      - instanceTypeId
+                      - instanceTypeGroupName
+                      - instanceTypeGroupCode
+                      - manualLastTime
+                      - manualStartTime
+                      - manualDescription
+                      - eventTypeName
+                      - eventTypeId
+                      - manualStatus
+                      - generationType
+                      - eventTypeList
+                      - manualExecuteStartTime
+                      - manualExecuteLastTime
+                      - labelIds
+                      - failureApplications
+                      - belongApplication
+                    x-apifox-orders:
+                      - id
+                      - code
+                      - severity
+                      - description
+                      - "startTime\t"
+                      - lastTime
+                      - status
+                      - businessImpactAnalysisReportCode
+                      - "rootCauseAnalysisReportCode\t"
+                      - "applicationTraceReportCode\t"
+                      - mitigationReportCode
+                      - alertCount
+                      - businessImpactDescription
+                      - businessImpactStatus
+                      - rootCauseDescription
+                      - rootCauseStatus
+                      - manualStartTime
+                      - manualLastTime
+                      - instanceTypeGroupCode
+                      - instanceTypeGroupName
+                      - instanceTypeId
+                      - instanceTypeCode
+                      - instanceTypeName
+                      - eventTypeId
+                      - eventTypeName
+                      - manualDescription
+                      - manualStatus
+                      - generationType
+                      - eventTypeList
+                      - manualExecuteStartTime
+                      - manualExecuteLastTime
+                      - labelIds
+                      - failureApplications
+                      - belongApplication
+                      - failedCause
+                    x-apifox-ignore-properties: []
+                required:
+                  - code
+                  - msg
+                  - data
+                x-apifox-orders:
+                  - code
+                  - msg
+                  - data
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85579845-run
+  /api/forest/v1/failure/alert_code_to_failure/list:
+    post:
+      summary: 通过告警编码列表查询告警编码对应的故障信息列表
+      deprecated: false
+      description: ''
+      parameters:
+        - name: Content-Type
+          in: header
+          description: ''
+          required: true
+          example: application/json
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: empty object
+              properties:
+                alertCodes:
+                  type: array
+                  items:
+                    type: string
+                    description: 告警编码
+                  description: 告警编码列表
+                currentPage:
+                  type: integer
+                pageSize:
+                  type: integer
+              required:
+                - alertCodes
+                - pageSize
+                - currentPage
+              x-apifox-orders:
+                - alertCodes
+                - currentPage
+                - pageSize
+              x-apifox-ignore-properties: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                title: empty object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      pageSize:
+                        type: integer
+                      totalPage:
+                        type: integer
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            alertCode:
+                              type: string
+                              description: 告警编码
+                            failure:
+                              type: object
+                              properties: {}
+                              description: 故障信息
+                              x-apifox-orders: []
+                              x-apifox-ignore-properties: []
+                          required:
+                            - alertCode
+                          x-apifox-orders:
+                            - alertCode
+                            - failure
+                          x-apifox-ignore-properties: []
+                    required:
+                      - total
+                      - currentPage
+                      - list
+                      - totalPage
+                      - pageSize
+                    x-apifox-orders:
+                      - total
+                      - currentPage
+                      - pageSize
+                      - totalPage
+                      - list
+                    x-apifox-ignore-properties: []
+                required:
+                  - code
+                  - msg
+                  - data
+                x-apifox-orders:
+                  - code
+                  - msg
+                  - data
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85924017-run
+  /api/forest/v1/failure/root/cause/analysis:
+    post:
+      summary: 应急事件信息-根因分析接口
+      deprecated: false
+      description: ''
+      parameters:
+        - name: Content-Type
+          in: header
+          description: ''
+          required: true
+          example: application/json
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: empty object
+              properties:
+                alertCode:
+                  type: string
+                  description: >-
+                    告警编码：精确查找;
+                    接口查询逻辑：1、告警编码、应用编码、应用名称三选一，但建议首选告警编码和应用编码、次优选为应用名称；
+                    2、三者可以同时都传入，匹配优先级：告警编码>应用编码>应用名称。
+                appCode:
+                  type: string
+                  description: 应用系统编码：精确查找
+                appName:
+                  type: string
+                  description: 应用系统名称：精确查找
+                analyTime:
+                  type: number
+                  description: >-
+                    分析时间：analyTime，必填项，格式：13位毫秒值，如果有告警，分析时间=告警开始时间，如果无告警，分析时间由页面传入
+              x-apifox-orders:
+                - alertCode
+                - appCode
+                - appName
+                - analyTime
+              x-apifox-ignore-properties: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                title: empty object
+                properties:
+                  code:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      description:
+                        type: string
+                        description: 根因分析描述的结论信息
+                      link:
+                        type: string
+                        description: 根因分析跳转链接
+                      code:
+                        type: string
+                        description: 码值映射；根因分析code，详情请看备注
+                    required:
+                      - description
+                      - link
+                      - code
+                    x-apifox-orders:
+                      - description
+                      - link
+                      - code
+                    x-apifox-ignore-properties: []
+                required:
+                  - code
+                  - data
+                  - msg
+                x-apifox-orders:
+                  - code
+                  - msg
+                  - data
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85924023-run
+components:
+  schemas: {}

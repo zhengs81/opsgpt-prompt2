@@ -13,6 +13,7 @@ target
 
 # env manager
 .python-version
+.env
 
 # tmp dirs
 logs
