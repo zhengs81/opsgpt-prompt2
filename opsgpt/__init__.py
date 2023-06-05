@@ -12,6 +12,9 @@ from langchain.tools.base import BaseTool
 
 from pathlib import Path
 from typing import Optional, Any, Sequence
+import yaml
+import jsonref
+import json
 
 
 ROOT_PATH = Path(__file__).parent.parent
@@ -40,6 +43,13 @@ class BizseerToolkit(CustomizedNLAToolkit):
         """the path to specific openapi spec file"""
         raise NotImplementedError("`spec_path` for `BizseerToolkit` is not implemented")
 
+    def _load_spec(filename) -> dict:
+        with open(filename, 'r') as f:
+            raw_spec = yaml.safe_load(f)
+
+        spec = jsonref.loads(json.dumps(raw_spec))
+        return spec
+
     @classmethod
     def from_llm(
         cls,
@@ -48,7 +58,7 @@ class BizseerToolkit(CustomizedNLAToolkit):
         verbose: bool = False,
         **kwargs: Any,
         ) -> BizseerToolkit:
-        spec = OpenAPISpec.from_file(cls.spec_path())
+        spec = OpenAPISpec.from_spec_dict(cls._load_spec(cls.spec_path()))
         return cls.from_llm_and_spec(
             llm,
             spec=spec,

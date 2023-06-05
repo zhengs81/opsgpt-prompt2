@@ -141,12 +141,13 @@ class CustomizedOpenAPIEndpointChain(OpenAPIEndpointChain):
         )
         
         if not raw_response:
-            fields_and_values["api_response_chain"] = CustomizedAPIResponderChain.from_llm(
+            cus_responder_chain = CustomizedAPIResponderChain.from_llm(
                 llm,
                 typescript_definition=operation.fetch_response_body(), 
                 verbose=verbose,
                 callbacks=callbacks,
             )
+            setattr(fields_and_values, "api_response_chain", cus_responder_chain)
         
-        return cls(**fields_and_values)
+        return fields_and_values
         
