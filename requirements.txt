@@ -1,5 +1,5 @@
 pytest>=7.3.1,<8.0.0
 langchain>=0.0.169,<0.1.0
-transformers>=4.29.3,<5.0.0
+transformers>=4.29.1,<5.0.0
 torch>=2.0.0,<3.0.0
 jsonref==1.1.0
