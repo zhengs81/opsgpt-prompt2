@@ -43,7 +43,7 @@ def __requests(__auth_token):
     return Requests(
         headers={
             "Content-Type": "application/json",
-            "Authorization": __auth_token
+            "Authorization": f"Bearer {__auth_token}"
         }
     )
 
