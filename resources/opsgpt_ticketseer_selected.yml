@@ -4,7 +4,7 @@ info:
   description: ''
   version: 1.0.0
 servers:
-  - url: http://gw.dev.bizseer.com
+  - url: http://10.0.100.6:8080
 paths:
   /api/forest/v1/failure/manual/silent:
     put:
