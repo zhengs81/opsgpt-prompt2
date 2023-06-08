@@ -3,11 +3,11 @@
 主要是实例和对象的精准搜索和模糊搜索
 """
 
-def test_instance_exact_search(search_agent_executor):
+def test_instance_exact_search(metacube_agent):
     """通过实例编码`APPCC-000001`精准搜索实例信息"""
 
     question = "APPCC-000001是什么？"
-    reply = search_agent_executor.run(question)
+    reply = metacube_agent.run(question)
 
     mentioned_instance_type_code = "APPCC" in reply
     mentioned_instance_code = "APPCC-000001" in reply
@@ -21,11 +21,11 @@ def test_instance_exact_search(search_agent_executor):
         ]))
 
 
-def test_instance_fuzz_search(search_agent_executor):
+def test_instance_fuzz_search(metacube_agent):
     """通过有输入错误的实例编码`APPCC-0001`模糊搜索实例信息"""
 
     question = "APPCC-0001是什么？"
-    reply = search_agent_executor.run(question)
+    reply = metacube_agent.run(question)
 
     mentioned_instance_type_code = "APPCC" in reply
     mentioned_instance_code = "APPCC-000001" in reply
@@ -54,10 +54,10 @@ def test_object_exact_search(search_agent_executor):
         ]))
 
 
-def test_object_fuzz_search(search_agent_executor):
+def test_object_fuzz_search(metacube_agent):
     """通过有输入错误的对象编码`Servce`模糊搜索对象信息"""
     question = "Servce是什么？"
-    reply = search_agent_executor.run(question)
+    reply = metacube_agent.run(question)
     
     mentioned_instance_type_code = "Service" in reply
     mentioned_entity_type = "对象" in reply
@@ -69,11 +69,11 @@ def test_object_fuzz_search(search_agent_executor):
         ]))
 
 
-def test_instance_search_by_name(search_agent_executor):
+def test_instance_search_by_name(metacube_agent):
     """通过有输入部分实例名称`200.20.119.9`模糊搜索实例信息"""
     
     question = "200.20.119.9是什么？"
-    reply = search_agent_executor.run(question)
+    reply = metacube_agent.run(question)
     
     mentioned_instance_type_code = "Pod" in reply
     mentioned_instance_code = "62e90690158b8671d0034939" in reply
