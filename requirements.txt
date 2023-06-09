@@ -3,3 +3,5 @@ langchain>=0.0.169,<0.1.0
 transformers>=4.29.1,<5.0.0
 torch>=2.0.0,<3.0.0
 jsonref==1.1.0
+openai>=0.27.8,<1.0.0
+python-dotenv>=1.0.0,<2.0.0
