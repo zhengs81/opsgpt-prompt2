@@ -11,14 +11,6 @@ paths:
       summary: 创建静默手动排障任务-单实例-广发
       deprecated: false
       description: ''
-      parameters:
-        - name: Content-Type
-          in: header
-          description: ''
-          required: true
-          example: application/json
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -373,14 +365,6 @@ paths:
       summary: 通过告警编码列表查询告警编码对应的故障信息列表
       deprecated: false
       description: ''
-      parameters:
-        - name: Content-Type
-          in: header
-          description: ''
-          required: true
-          example: application/json
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -479,14 +463,6 @@ paths:
       summary: 应急事件信息-根因分析接口
       deprecated: false
       description: ''
-      parameters:
-        - name: Content-Type
-          in: header
-          description: ''
-          required: true
-          example: application/json
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
