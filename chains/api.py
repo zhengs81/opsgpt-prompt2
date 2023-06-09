@@ -31,6 +31,8 @@ Otherwise respond with the following markdown json block:
 Response Error: ```json
 {{"response": "What you did and a concise statement of the resulting error. If it can be easily fixed, provide a suggestion."}}
 ```
+If USER_COMMENT is to execute a task, and API_RESPONSE includes code : 200 or message: OK/success, then simply tell user the task is 
+successfully executed.
 
 You MUST respond as a markdown json code block. The person you are responding to CANNOT see the API_RESPONSE and RESPONSE_SCHEMA, so if there is any relevant information there you must include it in your response.
 
