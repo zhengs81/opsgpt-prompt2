@@ -1,43 +1,25 @@
-from langchain.agents.mrkl.base import (
-    ZeroShotAgent,
-    PromptTemplate,
-    Sequence,
-    BaseTool,
-    PREFIX,
-    SUFFIX,
-    FORMAT_INSTRUCTIONS
+from langchain.agents.mrkl.base import ZeroShotAgent
+from langchain.schema import (
+    AgentAction,
+    BaseMessage,
 )
 
-from typing import (Optional, List)
+from typing import (List, Union, Tuple)
 
 
 class CustomizedZeroShotAgent(ZeroShotAgent):
-    @classmethod
-    def create_prompt(
-        cls,
-        tools: Sequence[BaseTool],
-        prefix: str = PREFIX,
-        suffix: str = SUFFIX,
-        format_instructions: str = FORMAT_INSTRUCTIONS,
-        input_variables: Optional[List[str]] = None,
-    ) -> PromptTemplate:
-        """Create prompt in the style of the zero shot agent.
+    def _construct_scratchpad(
+        self, intermediate_steps: List[Tuple[AgentAction, str]]
+    ) -> Union[str, List[BaseMessage]]:
+        """Construct the scratchpad that lets the agent continue its thought process."""
+        thoughts = []
+        for action, observation in intermediate_steps:
+            thoughts.append(action.log)
+            thoughts.append(f"{self.observation_prefix}{observation}")
+            thoughts.append(f"{self.llm_prefix}")
 
-        Args:
-            tools: List of tools the agent will have access to, used to format the
-                prompt.
-            prefix: String to put before the list of tools.
-            suffix: String to put after the list of tools.
-            input_variables: List of input variables the final prompt will expect.
-
-        Returns:
-            A PromptTemplate with the template assembled from the pieces here.
-        """
-        suffix += "The final answer MUST be translated to Chinese."
-        return super().create_prompt(
-            tools,
-            prefix=prefix,
-            suffix=suffix,
-            format_instructions=format_instructions,
-            input_variables=input_variables
-        )
+        if len(thoughts) > 1:
+            thoughts.pop()
+            thoughts.append("Always translate final answer to Chinese!!!\nThought:")
+        
+        return "\n".join(thoughts)

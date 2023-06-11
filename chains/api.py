@@ -56,13 +56,13 @@ class CustomizedAPIOperation(APIOperation):
             prop_desc = f"/* {prop.description} */" if prop.description else ""
 
             if prop.properties:
-                nested_props = self.format_nested_properties(
+                nested_props = self._format_response_properties(
                     prop.properties, indent + 2
                 )
                 prop_type = f"{{\n{nested_props}\n{' ' * indent}}}"
             
             if prop.items and prop.items.properties:
-                nested_props = self.format_nested_properties(
+                nested_props = self._format_response_properties(
                     prop.items.properties, indent + 2
                 )
                 prop_type = f"[\n{nested_props}\n{' ' * indent}]"
