@@ -4,7 +4,7 @@ info:
   description: ''
   version: 1.0.0
 servers:
-  - url: http://gateway1.uat.bizseer.com
+  - url: http://gateway1.dev.bizseer.com
 paths:
   /api/metrics-center/v1/metrics/timeseries:
     post:
