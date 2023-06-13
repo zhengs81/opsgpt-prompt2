@@ -1228,9 +1228,168 @@ components:
         results:
           type: object
           description: 返回结果
-          x-apifox-orders: []
-          properties: {}
-          x-apifox-ignore-properties: []
+          x-apifox-orders:
+            - id
+            - inspectionItemName
+            - inspectionValueType
+            - inspectionItemType
+            - tags
+            - priority
+            - remark
+            - strategyId
+            - strategyTemplateId
+            - rulesViewConfig
+            - rulesDataConfig
+            - parseScriptRules
+            - calculateRuleId
+            - calculateRuleDataConfig
+            - bizParam
+            - algoParam
+            - metricInstanceTypeCode
+            - metricInstanceTypeName
+            - metric
+            - metricId
+            - metricCode
+            - metricName
+            - metricInstantiateRuleType
+            - publishStatus
+            - exceptionLevels
+            - ruleExtendableContents
+          properties:
+            id:
+              type: integer
+              description: 检查项ID
+            inspectionItemName:
+              type: string
+              description: 检查项名称
+            inspectionValueType:
+              type: integer
+              description: 检测值类型（指标类型):1、数值;2、状态;3、关键字
+            inspectionItemType:
+              type: integer
+              description: 检查项分类
+            tags:
+              type: array
+              items:
+                type: string
+              description: 检查项标签列表
+            priority:
+              type: integer
+              description: 重要性类别
+            remark:
+              type: string
+              description: 备注
+            strategyId:
+              type: integer
+              description: 策略ID
+            strategyTemplateId:
+              type: string
+              description: 当前策略关联的策略模板ID
+            rulesViewConfig:
+              type: array
+              items:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                description: 规则的ViewConfig(Json对象)
+                x-apifox-ignore-properties: []
+              description: 前端展示-规则组,jsonArray格式
+            rulesDataConfig:
+              type: array
+              items:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                description: 规则的DataConfig(Json对象)
+                x-apifox-ignore-properties: []
+              description: 后端计算-规则组,jsonArray格式
+            parseScriptRules:
+              type: array
+              items:
+                type: object
+                properties: {}
+                x-apifox-orders: []
+                x-apifox-ignore-properties: []
+              description: 解析脚本规则,jsonArray格式(暂无用)
+            calculateRuleId:
+              type: integer
+              description: 计算规则ID
+            calculateRuleDataConfig:
+              type: object
+              properties: {}
+              x-apifox-orders: []
+              description: 计算规则下发对象,json格式
+              x-apifox-ignore-properties: []
+            bizParam:
+              type: object
+              properties: {}
+              x-apifox-orders: []
+              description: 业务参数,计算规则类型为算法时用,json格式
+              x-apifox-ignore-properties: []
+            algoParam:
+              type: object
+              properties: {}
+              description: 算法参数,计算规则类型为算法时用,json格式
+              x-apifox-orders: []
+              x-apifox-ignore-properties: []
+            metricInstanceTypeCode:
+              type: string
+              description: 指标对象编码
+            metricInstanceTypeName:
+              type: string
+              description: 指标对象名称
+            metric:
+              type: object
+              properties: {}
+              x-apifox-orders: []
+              description: 指标信息,json格式
+              x-apifox-ignore-properties: []
+            metricId:
+              type: string
+              description: 指标Id
+            metricCode:
+              type: string
+              description: 指标编码
+            metricName:
+              type: string
+              description: 指标名称
+            metricInstantiateRuleType:
+              type: string
+              description: 指标实例化规则类型
+            publishStatus:
+              type: integer
+              description: 发布状态，0:暂存，3:发布
+            exceptionLevels:
+              type: array
+              items:
+                type: object
+                x-apifox-refs:
+                  01H2Q9JRH6YQXX52V9CY15CWXJ:
+                    $ref: '#/components/schemas/ExceptionLevelVO'
+                    x-apifox-overrides: {}
+                properties:
+                  level:
+                    type: integer
+                    description: 异常等级
+                    format: int32
+                  value:
+                    type: number
+                    description: 异常权重值
+                    format: float
+                required:
+                  - 01H2Q9JRH64FWG35HXTTE0R6RH
+                x-apifox-orders:
+                  - 01H2Q9JRH6YQXX52V9CY15CWXJ
+                  - 01H2Q9JRH64FWG35HXTTE0R6RH
+                x-apifox-ignore-properties:
+                  - level
+                  - value
+              description: 异常权重jsonArray
+            ruleExtendableContents:
+              type: array
+              items:
+                $ref: '#/components/schemas/RuleExtendableVO'
+              description: 规则扩展字段列表
       description: 响应结果
       x-apifox-orders:
         - code
