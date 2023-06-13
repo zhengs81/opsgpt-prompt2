@@ -11,13 +11,6 @@ paths:
       summary: 指标时序数据查询
       deprecated: false
       description: ''
-      parameters:
-        - name: Authorization
-          in: header
-          description: ''
-          example: '{{AUTH_TOKEN}}'
-          schema:
-            type: string
       requestBody:
         content:
           application/json:
@@ -267,7 +260,7 @@ paths:
     get:
       summary: 指标资产-服务列表
       deprecated: false
-      description: ''
+      description: '输入指标ID，返回一个输入指标ID相关的数据服务或接口列表'
       operationId: findMetricDataServeListUsingGET
       parameters:
         - name: metricId
@@ -513,7 +506,7 @@ components:
           description: 状态值：0-成功，1-失败(常规业务)，2-失败(数据冲突)
         data:
           type: array
-          description: 业务数据
+          description: 数据门户服务列表
           items:
             $ref: >-
               #/components/schemas/PortalService

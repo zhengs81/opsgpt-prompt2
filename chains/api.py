@@ -17,14 +17,21 @@ from typing import Any, Optional
 
 CUSTOMIZED_RESPONSE_TEMPLATE = """You are a helpful AI assistant trained to answer user queries from API responses.
 You attempted to call an API, which resulted in:
+
 API_RESPONSE: {response}
-RESPONSE_SCHEMA: {schema}
-USER_COMMENT: "{instructions}"
 
+RESPONSE_SCHEMA: ```typescript
+/* 请求成功的响应体 */
+type SuccessResponse = {{
+{schema}
+}};
+```
 
-If the API_RESPONSE and RESPONSE_SCHEMA can answer the USER_COMMENT respond with the following markdown json block:
+USER_COMMENT: {instructions}({api_description})
+
+If the API_RESPONSE can answer the USER_COMMENT, please respond with the following markdown json block:
 Response: ```json
-{{"response": "Human-understandable synthesis of the API_RESPONSE following RESPONSE_SCHEMA"}}
+{{"response": "Human-understandable synthesis of the API_RESPONSE, always trying to lookup definition in RESPONSE_SCHEMA. Since API_RESPONSE is a plain valid json object conforming to RESPONSE_SCHEMA"}}
 ```
 
 Otherwise respond with the following markdown json block:
@@ -93,8 +100,7 @@ class CustomizedAPIOperation(APIOperation):
             return self._format_response_properties(response_props)
         except:
             # KeyError, properties not found, no schema
-            return "No Schema Found"
-
+            return "/* Unknown */"
 
 
 class CustomizedAPIResponderChain(APIResponderChain):
@@ -103,6 +109,7 @@ class CustomizedAPIResponderChain(APIResponderChain):
     def from_llm(
         cls, llm: BaseLanguageModel, 
         typescript_definition: str, 
+        description: str,
         verbose: bool = True, 
         **kwargs: Any
     ) -> LLMChain:
@@ -110,7 +117,10 @@ class CustomizedAPIResponderChain(APIResponderChain):
         prompt = PromptTemplate(
             template=CUSTOMIZED_RESPONSE_TEMPLATE,
             output_parser=output_parser,
-            partial_variables={"schema": typescript_definition},
+            partial_variables={
+                "schema": typescript_definition,
+                "api_description": description
+            },
             input_variables=["response", "instructions"],
         )
         return cls(prompt=prompt, llm=llm, verbose=verbose, **kwargs)
@@ -146,6 +156,7 @@ class CustomizedOpenAPIEndpointChain(OpenAPIEndpointChain):
             cus_responder_chain = CustomizedAPIResponderChain.from_llm(
                 llm,
                 typescript_definition=operation.fetch_response_body(), 
+                description=operation.description,
                 verbose=verbose,
                 callbacks=callbacks,
             )
