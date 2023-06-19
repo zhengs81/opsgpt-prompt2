@@ -171,6 +171,7 @@ paths:
                     nullable: true
                   data:
                     type: object
+                    description: 指标基本信息
                     properties:
                       currentPage:
                         type: integer
@@ -379,6 +380,7 @@ components:
           description: 状态值：0-成功，1-失败(常规业务)，2-失败(数据冲突)
         data:
           $ref: '#/components/schemas/PortalBasicInfo'
+          description: 数据门户指标详情
         errDetail:
           type: string
           description: 错误详细信息，code!=0时供debug查看
@@ -400,49 +402,69 @@ components:
           type: array
           items:
             type: string
+          description: 指标业务分类
         businessSystemTitle:
           type: string
+          description: 业务系统
         createTime:
           type: integer
           format: int64
+          description: 指标创建时间
         createUser:
           type: string
+          description: 指标创建人
         createUserGroup:
           type: string
+          description: 创建用户组别
         dimensions:
           type: array
           items:
             $ref: '#/components/schemas/MetricDimensionBeanOut'
+          description: 维度
         granularity:
           type: string
+          description: 指标颗粒度
         levelName:
           type: string
+          description: 水平名称
         measurementName:
           type: string
+          description: 测量方法名称
         metricCategory:
           type: string
+          description: 指标种类
         metricCode:
           type: string
+          description: 指标英文名
         metricId:
           type: integer
           format: int32
+          description: 指标ID
         metricNameCn:
           type: string
+          description: 指标中文名
         metricSource:
           type: string
+          description: 数据来源
         modelName:
           type: string
+          description: 模型名称名
         reserve:
           type: string
+          description: 指标存储周期
         statisticalCaliber:
           type: string
+          description: 统计口径
         unit:
           type: string
+          description: 单位
         updateTime:
           type: integer
           format: int64
+          description: 更新时间
         updateUser:
           type: string
+          description: 更新用户
       title: PortalBasicInfo
       x-apifox-orders:
         - bizCategoryNames
@@ -472,8 +494,10 @@ components:
       properties:
         dimensionCode:
           type: string
+          description: 维度英文名
         dimensionNameCn:
           type: string
+          description: 维度中文名
       title: MetricDimensionBeanOut
       x-apifox-orders:
         - dimensionCode
