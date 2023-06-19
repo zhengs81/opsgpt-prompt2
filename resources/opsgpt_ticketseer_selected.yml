@@ -4,8 +4,333 @@ info:
   description: ''
   version: 1.0.0
 servers:
-  - url: http://10.0.100.6:8080
+  - url: http://gw.uat.bizseer.com
 paths:
+  /api/forest/v1/alert/search-after-list:
+    post:
+      summary: 前端-告警列表查询(深翻页)
+      x-apifox-folder: 告警
+      x-apifox-status: developing
+      deprecated: false
+      description: "用于搜索或查询一段时间范围内告警列表，包含告警描述、告警编码、故障编号、实例相关信息，必须输入分页参数（当前页面，页面大小）"
+      tags:
+        - 告警
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: empty object
+              properties:
+                description:
+                  type: string
+                  description: 告警描述
+                failureCode:
+                  type: string
+                  description: 故障编号
+                instanceCode:
+                  type: string
+                  description: 实例编码
+                instanceNames:
+                  type: array
+                  items:
+                    type: string
+                    description: 实例名称(完整名称，非模糊匹配)
+                  description: 实例名称列表
+                instanceCodes:
+                  type: array
+                  items:
+                    type: string
+                    description: 实例编码
+                  description: 实例编码列表
+                instanceTypeCode:
+                  type: string
+                  description: 对象编码
+                transCode:
+                  type: string
+                  description: 交易码
+                startTime:
+                  type: number
+                  description: 事件开始时间
+                lastTime:
+                  type: number
+                  description: 事件最后发生时间
+                severities:
+                  type: array
+                  items:
+                    type: integer
+                    description: '告警级别: -1: 数据缺失，0:  正常。1: 通知，2: 警告，3: 次要，4: 主要，5: 紧急'
+                  description: 等级可能多选
+                source:
+                  type: string
+                  description: monitor  事件来源，必需，如果没有juggle填充，包含monitor，三方告警等来源
+                query:
+                  type: string
+                  description: 模糊查询：告警描述；当复盘时，支持事件名称、实例、描述模糊查询
+                status:
+                  type: integer
+                  description: '告警状态，0:进行中, 1: 已恢复，如果事件是告警则必需'
+                currentPage:
+                  type: integer
+                  description: 当前页
+                pageSize:
+                  type: integer
+                  description: 每页展示的数据量
+                sortValues:
+                  type: array
+                  items:
+                    type: object
+                    properties: {}
+                    description: 字符串或者数字
+                    x-apifox-orders: []
+                    x-apifox-ignore-properties: []
+                  description: 传入上一页最后一条记录的 sortValue列表
+                timeOptions:
+                  type: integer
+                  description: 增加查询字段选择，提供两个时间选项，1：告警开始时间（默认选择）2：告警更新时间；
+                metricName:
+                  type: string
+                  description: 指标名称模糊查找
+                instanceTypeCodes:
+                  type: array
+                  items:
+                    type: string
+                    description: 对象编码
+                metricCode:
+                  type: string
+                  description: 指标编码
+                instanceTypeGroupCode:
+                  type: string
+                  description: 对象分组编码
+                identificationStatus:
+                  type: string
+                  description: 识别状态 【全部：ALL,已识别：IDENRIFIED,未识别：UNIDENTIFIED】
+                eventTypeIds:
+                  type: array
+                  items:
+                    type: integer
+                  description: 排障事件id列表
+                metricCodes:
+                  type: array
+                  items:
+                    type: string
+                generationType:
+                  type: string
+                  description: '"trigger"或者"stream"'
+              required:
+                - currentPage
+                - sortValues
+                - timeOptions
+                - metricName
+                - metricCode
+                - instanceTypeCodes
+                - instanceTypeGroupCode
+                - identificationStatus
+                - metricCodes
+                - eventTypeIds
+              x-apifox-orders:
+                - failureCode
+                - instanceCode
+                - instanceNames
+                - instanceCodes
+                - instanceTypeCode
+                - transCode
+                - startTime
+                - lastTime
+                - severities
+                - source
+                - query
+                - status
+                - currentPage
+                - pageSize
+                - sortValues
+                - timeOptions
+                - metricName
+                - instanceTypeCodes
+                - metricCode
+                - instanceTypeGroupCode
+                - identificationStatus
+                - eventTypeIds
+                - metricCodes
+                - generationType
+              x-apifox-ignore-properties: []
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: 成功返回200
+                  msg:
+                    type: string
+                    description: 成功返回OK，失败返回原因
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            code:
+                              type: string
+                              description: 告警编号
+                            severity:
+                              type: integer
+                              description: >-
+                                告警级别: -1: 数据缺失，0:  正常。1: 通知，2: 警告，3: 次要，4: 主要，5:
+                                紧急
+                            instanceCode:
+                              type: string
+                              description: 实例编码
+                            instanceName:
+                              type: string
+                              description: 实例名称
+                            instanceTypeName:
+                              type: string
+                              description: 对象名称
+                            instanceTypeCode:
+                              type: string
+                              description: 对象编码
+                            metricCode:
+                              type: string
+                              description: 指标编码
+                            metricName:
+                              type: string
+                              description: 指标名称
+                            description:
+                              type: string
+                              description: 告警描述
+                            startTime:
+                              type: string
+                              description: 事件开始时间
+                            lastTime:
+                              type: string
+                              description: 事件最后发生时间
+                            status:
+                              type: string
+                              description: '告警状态，0:进行中, 1: 已恢复，如果事件是告警则必需'
+                            source:
+                              type: string
+                              description: 事件来源，必需，如果没有juggle填充，包含monitor，三方告警等来源
+                            count:
+                              type: string
+                              description: 发生次数
+                            processTime:
+                              type: string
+                              description: 处理时间，收到数据时间
+                            delayTime:
+                              type: string
+                              description: porcesstime-lasttime 单位ms
+                            failureCodes:
+                              type: array
+                              items:
+                                type: string
+                                description: 故障编号
+                              description: 故障编号(列表)
+                            identificationStatus:
+                              type: string
+                              description: 纳管状态 【全部：ALL,已纳管：IDENRIFIED,未纳管：UNIDENTIFIED】
+                            identificationDesc:
+                              type: string
+                              description: 纳管信息描述
+                          required:
+                            - code
+                            - instanceTypeName
+                            - severity
+                            - metricCode
+                            - instanceTypeCode
+                            - lastTime
+                            - startTime
+                            - description
+                            - metricName
+                            - status
+                            - count
+                            - source
+                            - instanceName
+                            - instanceCode
+                            - identificationStatus
+                            - identificationDesc
+                          description: 告警对象
+                          x-apifox-orders:
+                            - code
+                            - severity
+                            - instanceCode
+                            - instanceName
+                            - instanceTypeName
+                            - instanceTypeCode
+                            - metricCode
+                            - metricName
+                            - description
+                            - startTime
+                            - lastTime
+                            - status
+                            - source
+                            - count
+                            - processTime
+                            - delayTime
+                            - failureCodes
+                            - identificationStatus
+                            - identificationDesc
+                          x-apifox-ignore-properties: []
+                        description: 告警列表
+                      total:
+                        type: integer
+                        description: 总数据条数
+                      pageSize:
+                        type: string
+                        description: 每页展示的数据量
+                      pageSortValuesList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            a:
+                              type: integer
+                              description: 页码
+                            b:
+                              type: array
+                              items:
+                                type: object
+                                properties: {}
+                                description: 字符串或者数字
+                                x-apifox-orders: []
+                                x-apifox-ignore-properties: []
+                              description: a 页数据最后一条记录的sortValue 列表
+                          required:
+                            - a
+                            - b
+                          x-apifox-orders:
+                            - a
+                            - b
+                          x-apifox-ignore-properties: []
+                        description: 返回多个 <页码, sortValue 列表> 对
+                    required:
+                      - list
+                      - total
+                      - pageSize
+                      - pageSortValuesList
+                    description: 返回信息
+                    x-apifox-orders:
+                      - list
+                      - total
+                      - pageSize
+                      - pageSortValuesList
+                    x-apifox-ignore-properties: []
+                required:
+                  - code
+                  - data
+                  - msg
+                x-apifox-orders:
+                  - code
+                  - msg
+                  - data
+                x-apifox-ignore-properties: []
+      x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85579847-run
   /api/forest/v1/failure/manual/silent:
     put:
       summary: 创建静默手动排障任务-单实例-广发

@@ -24,15 +24,18 @@ OPENAPI_FORMAT_INSTRUCTION = """Use the following format:
 Question: the input question you must answer
 Thought: you should always think about what to do
 Action: the action to take, should be one of [{tool_names}]
-Action Input: what to instruct the AI Action representative.
+Action Input: what to instruct the AI Action to do with the required data or information and context for tool to bettwer understanding as well.
 Observation: The Agent's response
 ... (this Thought/Action/Action Input/Observation can repeat N times)
 Thought: I now know the final answer. User can't see any of my observations, API responses, links, or tools. And I shoudld translate my answer to Chinese.
 Final Answer: 具有适当细节的原始输入问题的最终答案
 
+The Action Input should include some information about your intention instead of simple and short instruction.
 When responding with your Final Answer, remember that the person you are responding to CANNOT see any of your Thought/Action/Action Input/Observations, so if there is any relevant information there you need to include it explicitly in your response. 
 
-Important!!! when you think you know the final answer, please always translate your answer into Chinese"""
+Important!!! when you think you know the final answer, please always translate your answer into Chinese.
+If you think you don't know the final answer, but get at least one successful API response, then return some [key : value] pairs from the API response that you believe is useful.
+"""
 
 
 class BizseerToolkit(CustomizedNLAToolkit):
