@@ -25,6 +25,8 @@ You MUST start from `data` and MUST only add one key at a time to the path. You 
 If the question does not seem to be related to the JSON after trials, just return "I don't know" as the answer.
 Always begin your interaction with the `json_spec_brief_view` tool with input "data" to see the root information of the JSON.
 
+If the final answer is from an array, then you MUST walk through ALL elements of the array to give final answer
+
 Do not simply refer the user to the JSON or a section of the JSON, as this is not a valid answer.
 You MUST NOT return `{{...}}` or `[...]` in the final answer, instead, you MUST keep digging until you find the answer and explicitly return it, but do not repeat the same action input.
 """
@@ -222,7 +224,7 @@ class CustomizedJsonSpec(JsonSpec):
     max_desc_len: int = 150
     
     """maximum display columns for json array in table view"""
-    max_cols: int = 10
+    max_cols: int = 15
     
     """maximum display rows for json array in table view"""
     max_rows: int = 10
