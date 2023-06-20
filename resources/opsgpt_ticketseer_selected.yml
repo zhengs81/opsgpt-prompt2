@@ -398,18 +398,213 @@ paths:
                 properties:
                   code:
                     type: number
+                    description: "成功返回200\t"
                   msg:
                     type: string
+                    description: "成功返回OK，失败返回原因\t"
                   data:
                     type: object
+                    description: "根因描述"
                     properties:
+                      id:
+                        type: integer
+                        description: 故障ID
                       code:
                         type: string
                         description: 故障编码
+                      startTime:
+                        type: integer
+                        description: 故障开始时间
+                      lastTime:
+                        type: integer
+                        description: 故障结束时间
+                      severity:
+                        type: integer
+                        description: 故障等级
+                      status:
+                        type: integer
+                        description: 故障状态
+                      description:
+                        type: string
+                        description: 故障描述
+                      alertCount:
+                        type: integer
+                        description: 归属当前故障的告警数量
+                      rootCauseDescription:
+                        type: string
+                        description: 根因描述
+                      belongApplication:
+                        type: array
+                        description: 故障所属应用信息
+                        items: 
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: 故障所属应用ID
+                            failureCode:
+                              type: string
+                              description: 故障编码
+                            instanceId:
+                              type: integer
+                              description: 故障所属应用实例ID
+                            instanceCode:
+                              type: string
+                              description: 故障所属应用实例编码
+                            instanceName:
+                              type: string
+                              description: 故障所属应用实例名称
+                            instanceTypeId:
+                              type: integer
+                              description: 故障所属应用对象ID
+                            instanceTypeCode:
+                              type: string
+                              description: 故障所属应用对象编码
+                            instanceTypeName:
+                              type: string
+                              description: 故障所属应用对象名称
+                      labelIds:
+                        type: array
+                        items:
+                          type: int
+                          description: 故障标签列表
+                      analysisReportIdMap:
+                        type: object
+                        description: 故障相关算法报告ID合集
+                        properties:
+                          anomalyId:
+                            type: string
+                            description: 异常检测报告ID
+                          moverId:
+                            type: string
+                            description: 告警摘要报告ID
+                          glanceId:
+                            type: string
+                            description: 相似疑似故障报告ID
+                          failureLabelId:
+                            type: string
+                            description: 故障标签报告ID
+                          mitigationRecommendId:
+                            type: string
+                            description: 止损推荐报告ID
+                          rootCauseRecommendId:
+                            type: string
+                            description: 根因推荐报告ID
+                          chainOfEvidenceId:
+                            type: string
+                            description: 证据链报告ID
+                          momentId:
+                            type: string
+                            description: 全局告警摘要报告ID
+                          influenceId:
+                            type: string
+                            description: 业务影响报告ID
+                      generationType:
+                        type: integer
+                        description: 排障类型 0-自动排障 1-手动排障
+                      newGenerated:
+                        type: boolean
+                        description: 是否是新创建的故障，新故障会触发分析
+                      hasRunningManualTask:
+                        type: boolean
+                        description: 是否有正在进行的人工分析任务, 若有, 则前端显示「分析中」标签
+                      lastFailureAnalysisTime:
+                        type: integer
+                        description: 上次失败分析时间
+                      analysisInstanceCounts:
+                        type: integer
+                        description: 故障分析实例的数量
+                      failureCodeMergedTo:
+                        type: string
+                        description: 合并到的故障
+                      failureMergeType:
+                        type: string
+                        description: 合并类型
+                      snapshotTime:
+                        type: integer
+                        description: 快照时间
+                      snapshotStatus:
+                        type: string
+                        description: 快照状态
+                      triggeredFailureExtensionAnalysisNodeIdSet:
+                        type: array
+                        description: 已经触发了事件分析的故障外延分析节点，对于每个故障每个节点只触发
+                      incidentStreamForestNodeIdSet:
+                        type: array
+                        description: incident stream event 所在的森林节点集合
+                      triggerNecessaryFailureAnalysis:
+                        type: boolean
+                        description: 必须要执行故障分析 - 1. 初始化 2. 状态改变
+                      firstIncidentInstanceTypeId:
+                        type: integer
+                        description: 第一个触发故障的对象ID
+                      applicationTraceRootCauseMap:
+                        type: object
+                        description: 合并调用链报告的所有根因列表, report id -> ApplicationRootCauses
+                      rootEventIdList:
+                        type: array
+                        description: 告警事件列表中的根节点事件主键列表, 确定 fault 唯一性，用户查询异常森林子图, json格式
+                        items:
+                          type: string
+                      userGroup:
+                        type: string
+                        description: 用户组
                     required:
+                      - id
                       - code
+                      - startTime
+                      - lastTime
+                      - severity
+                      - status
+                      - description
+                      - alertCount
+                      - rootCauseDescription
+                      - belongApplication
+                      - labelIds
+                      - analysisReportIdMap
+                      - newGenerated
+                      - hasRunningManualTask
+                      - lastFailureAnalysisTime
+                      - analysisInstanceCounts
+                      - failureCodeMergedTo
+                      - failureMergeType
+                      - snapshotTime
+                      - snapshotStatus
+                      - triggeredFailureExtensionAnalysisNodeIdSet
+                      - ncidentStreamForestNodeIdSet
+                      - triggerNecessaryFailureAnalysis
+                      - firstIncidentInstanceTypeId
+                      - applicationTraceRootCauseMap
+                      - rootEventIdList
+                      - userGroup
                     x-apifox-orders:
+                      - id
                       - code
+                      - startTime
+                      - lastTime
+                      - severity
+                      - status
+                      - description
+                      - alertCount
+                      - rootCauseDescription
+                      - belongApplication
+                      - labelIds
+                      - analysisReportIdMap
+                      - newGenerated
+                      - hasRunningManualTask
+                      - lastFailureAnalysisTime
+                      - analysisInstanceCounts
+                      - failureCodeMergedTo
+                      - failureMergeType
+                      - snapshotTime
+                      - snapshotStatus
+                      - triggeredFailureExtensionAnalysisNodeIdSet
+                      - ncidentStreamForestNodeIdSet
+                      - triggerNecessaryFailureAnalysis
+                      - firstIncidentInstanceTypeId
+                      - applicationTraceRootCauseMap
+                      - rootEventIdList
+                      - userGroup
                     x-apifox-ignore-properties: []
                 x-apifox-orders:
                   - code
@@ -727,21 +922,29 @@ paths:
                 properties:
                   code:
                     type: integer
+                    description: 成功返回200
                   msg:
                     type: string
+                    description: 成功返回OK, 失败返回原因
                   data:
                     type: object
+                    description: 故障信息列表
                     properties:
                       total:
                         type: integer
+                        description: 总量
                       currentPage:
                         type: integer
+                        description: 当前页面
                       pageSize:
                         type: integer
+                        description: 每页数据量
                       totalPage:
                         type: integer
+                        description: 页面总数
                       list:
                         type: array
+                        description: 故障信息列表
                         items:
                           type: object
                           properties:
@@ -750,10 +953,149 @@ paths:
                               description: 告警编码
                             failure:
                               type: object
-                              properties: {}
                               description: 故障信息
                               x-apifox-orders: []
                               x-apifox-ignore-properties: []
+                              properties:
+                                id:
+                                  type: integer
+                                  description: 故障ID
+                                code:
+                                  type: string
+                                  description: 故障编码
+                                rootEventIdList:
+                                  type: array
+                                  description: 根活动ID列表
+                                severity:
+                                  type: integer
+                                  description: 故障等级
+                                status:
+                                  type: integer
+                                  description: 故障状态
+                                startTime:
+                                  type: integer
+                                  description: 故障开始时间
+                                lastTime:
+                                  type: integer
+                                  description: 故障结束时间
+                                description:
+                                  type: string
+                                  description: 故障描述
+                                containsApplicationTrace:
+                                  type: boolean
+                                  description: 是否包含应用追踪
+                                applicationTraceRootEventIdList:
+                                  type: array
+                                  description: 应用追踪根活动ID列表
+                                applicationTraceRootCauseMap:
+                                  type: object
+                                  description: 应用追踪根活动根因图标
+                                analysisReportIdMap:
+                                  type: object
+                                  description: 分析报告图标
+                                  properties:
+                                    moverId:
+                                      type: string
+                                      description: 告警摘要报告ID
+                                    glanceId:
+                                      type: string
+                                      description: 相似疑似故障报告ID
+                                    failureLabelId:
+                                      type: string
+                                      description: 故障标签报告ID
+                                    mitigationRecommendId:
+                                      type: string
+                                      description: 止损推荐报告ID
+                                    rootCauseRecommendId:
+                                      type: string
+                                      description: 根因推荐报告ID
+                                    chainOfEvidenceId:
+                                      type: string
+                                      description: 证据链报告ID
+                                    momentId:
+                                      type: string
+                                      description: 全局告警摘要报告ID
+                                    influenceId:
+                                      type: string
+                                      description: 业务影响报告ID
+                                belongApplication:
+                                  type: array
+                                  description: 属于应用
+                                applicationTraceReportCodes:
+                                  type: array
+                                  description: 应用追踪报告编码
+                                rootCauseAnalysisReportCode:
+                                  type: string
+                                  description: 根因分析报告编码
+                                businessImpactAnalysisReportCode:
+                                  type: string
+                                  description: 业务影响分析报告编码
+                                mitigationReportCode:
+                                  type: string
+                                  description: 止损报告编码
+                                firstIncidentInstanceTypeId:
+                                  type: string
+                                  description: 初次故障实例类型ID
+                                snapshotTime:
+                                  type: integer
+                                  description: 快照时间
+                                snapshotStatus:
+                                  type: string
+                                  description: 快照状态
+                                alertCount:
+                                  type: integer
+                                  description: 归属当前故障的告警数量
+                                taskLimit:
+                                  type: object
+                                  description: 任务限制
+                                failureMergeType: 
+                                  type: string
+                                  description: 汇入失败类型
+                                failureCodeMergedTo:
+                                  type: string
+                                  description: 汇入失败融入到
+                                rootCauseDescription:
+                                  type: string
+                                  description: 根因描述
+                                generationType:
+                                  type: integer
+                                  description: 版本类型
+                                replayId:
+                                  type: integer
+                                  description: 重演ID
+                                updateTime:
+                                  type: integer
+                                  description: 更新时间
+                                newGenerated:
+                                  type: boolean
+                                  description: 是否新生成
+                                triggeredTaskSet:
+                                  type: object
+                                  description: 已触发任务集合
+                                triggeredFailureExtensionAnalysisNodeIdSet:
+                                  type: array
+                                  description: 已触发失败拓展分析ID集合
+                                incidentStreamForestNodeIdSet:
+                                  type: array
+                                  description: 故障流森林ID集合
+                                lastFailureAnalysisTime:
+                                  type: int
+                                  description: 上次失败分析时间
+                                triggerNecessaryFailureAnalysis:
+                                  type: boolean
+                                  description: 是否激发必要失败分析
+                                failureApplications:
+                                  type: array
+                                  description: 失败应用
+                                labelIds:
+                                  type: array
+                                  description: 标签ID
+                                reportRecordList:
+                                  type: array
+                                  description: 报告记录列表
+                                analysisInstanceCounts:
+                                  type: int
+                                  description: 分析实例数量
                           required:
                             - alertCode
                           x-apifox-orders:
@@ -828,8 +1170,10 @@ paths:
                 properties:
                   code:
                     type: integer
+                    description: 成功返回0, 失败返回1
                   msg:
                     type: string
+                    description: 消息
                   data:
                     type: object
                     properties:
@@ -841,7 +1185,7 @@ paths:
                         description: 根因分析跳转链接
                       code:
                         type: string
-                        description: 码值映射；根因分析code，详情请看备注
+                        description: 码值映射; 根因分析code, 详情请看备注
                     required:
                       - description
                       - link

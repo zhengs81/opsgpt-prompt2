@@ -202,6 +202,7 @@ components:
           example: 0
         data:
           $ref: '#/components/schemas/AnalysisRecordVO'
+          description: 警告详情
         msg:
           type: string
           description: 错误信息
@@ -222,26 +223,34 @@ components:
         analysisEndTime:
           type: integer
           format: int64
+          description: 分析结束时间
         analysisStartTime:
           type: integer
           format: int64
+          description: 分析开始时间
         analysisStatus:
           type: string
+          description: 分析状态
         name:
           type: string
+          description: 名称
         report:
           type: object
           x-apifox-orders: []
           properties: {}
           x-apifox-ignore-properties: []
+          description: 报表对象
         reportEndTime:
           type: integer
           format: int64
+          description: 报表结束时间
         reportId:
           type: string
-        reportStartTime:
+          description: 报表ID
+        reportStartTime: 
           type: integer
           format: int64
+          description: 报表开始时间
       title: AnalysisRecordVO
       x-apifox-orders:
         - analysisAlertConditionDTO
@@ -315,33 +324,44 @@ components:
       properties:
         alertId:
           type: string
+          description: alert告警数据表的ID
         alertLevel:
           type: integer
           format: int32
+          description: 级别数字越大级别越高, 允许扩展(0:未知, 1:预警, 2:次要, 3.主要, 4.严重）
         alertStatus:
           type: integer
           format: int32
+          description: 告警状态 1故障, 2恢复
         createTime:
           type: integer
           format: int64
+          description: 创建时间
         createUser:
           type: string
+          description: 创建人
         firstOccurrenceTime:
           type: integer
           format: int64
+          description: 首次发生时间
         id:
           type: string
+          description: 主键
         opType:
           type: integer
           format: int32
+          description: 操作类型
         processStatus:
           type: integer
           format: int32
+          description: 告警状态  0打开  1确认  2 关闭
         recoveryTime:
           type: integer
           format: int64
+          description: 告警恢复时间
         remark:
           type: string
+          description: 备注
       title: AlertOpRecordVo
       x-apifox-orders:
         - alertId
@@ -434,143 +454,197 @@ components:
         aggregationGroup:
           type: integer
           format: int32
+          description: 聚合组
         aggregationIdentifier:
           type: string
+          description: 聚合组的唯一标识
         aggregationLevel:
           type: integer
           format: int32
+          description: 聚合层级默认1, 1父类, 2子类
         aggregationLock:
           type: integer
           format: int32
+          description: 聚合锁
         aggregationNum:
           type: integer
           format: int32
+          description: 记录聚合子告警数
         alertKey:
           type: string
+          description: 监控指标:cpu使用率、内存使用率等
         alertLevel:
           type: integer
           format: int32
+          description: 级别数字越大级别越高, 允许扩展(0:未知, 1:预警, 2:次要, 3.主要, 4.严重）
         alertStatus:
           type: integer
           format: int32
+          description: 告警状态 1故障, 2恢复
         alertValue:
           type: string
+          description: 指标值
         business:
           type: string
+          description: 业务系统
         businessShort:
           type: string
+          description: 业务系统简称
         category:
           type: string
+          description: 监控分类：操作系统、数据库、中间件等
         closeTime:
           type: integer
           format: int64
+          description: 关闭时间
         compressGroup:
           type: integer
           format: int32
+          description: 压缩组
         compressIdentifier:
           type: string
+          description: 压缩组的唯一标识
         compressLevel:
           type: integer
           format: int32
+          description: 压缩层级默认1，1父类，2子类
         compressLock:
           type: integer
           format: int32
+          description: 压缩锁
         compressNum:
           type: integer
           format: int32
+          description: 记录压缩子告警数
         confirmDuration:
           type: integer
           format: int64
+          description: 告警确认时长（单位：毫秒)
         confirmTime:
           type: integer
           format: int64
+          description: 确认时间
         createTime:
           type: integer
           format: int64
+          description: 数据入库时间
         dataCenter:
           type: string
+          description: 数据对应的数据中心
         dataSource:
           type: string
+          description: 数据来源标志
         dataType:
           type: integer
           format: int32
+          description: 1.正常告警  2 过滤告警 3 无效告警
         dimension:
           type: string
+          description: 维度
         firstOccurrenceTime:
           type: integer
           format: int64
+          description: 首次发生时间
         flowEndTime:
           type: integer
           format: int64
+          description: 流程处理结束时间
         flowStatus:
           type: integer
           format: int32
+          description: 流程状态 0流程结束 1流程中
         id:
           type: string
+          description: 告警表唯一ID
         identifier:
           type: string
+          description: 告警唯一标识
         itsmFlag:
           type: integer
           format: int32
+          description: 工单标志 (0:未转工单,1:已转工单)
         lastOccurrenceTime:
           type: integer
           format: int64
+          description: 最后发生时间
         maintenanceFlag:
           type: integer
           format: int32
+          description: 维护期标志  (0:不属于维护期,1:维护期内)
         misreportFlag:
           type: integer
           format: int32
+          description: 误报标志 0 非误报  1 误报
         monitorObject:
           type: string
+          description: 监控对象(定位告警指标-对应指标维度)如单机多个oracle, 其中一个实例
         node:
           type: string
+          description: 故障发生对象的IP
         nodeAlias:
           type: string
+          description: 故障发生的主机名
         noticeFlag:
           type: integer
           format: int32
+          description: 通知状态标志 0 无通知 1 通知有成功 2 通知从未成功
         object:
           type: string
+          description: 对象类(探针类型)指:cpu_total、/home、disk1、表空间1
         objectClass:
           type: string
+          description: 对象类(探针类型)的分类:cpu、filesystem、磁盘、数据库实例1
         occurrenceNum:
           type: integer
           format: int32
+          description: occurrenceNum 发生次数
         openDuration:
           type: integer
           format: int64
+          description: 告警打开时长(单位：毫秒)
         processDuration:
           type: integer
           format: int64
+          description: 告警人工处理时长(单位：毫秒)
         processStatus:
           type: integer
           format: int32
+          description: 告警处理状态  0打开  1确认  2 关闭
         recoveryDuration:
           type: integer
           format: int64
+          description: 告警持续时长(单位:毫秒)
         recoveryTime:
           type: integer
           format: int64
+          description: 告警恢复时间
         reportTime:
           type: integer
           format: int64
+          description: 底层上报时间(发到接收中间件的时间)
         summary:
           type: string
+          description: 告警正文
         tag:
           type: string
+          description: 标签
         transmissionDuration:
           type: integer
           format: int64
+          description: 告警传输时长(单位:毫秒)
         updateTime:
           type: integer
           format: int64
+          description: 数据最后更新时间
         userGroup:
           type: string
+          description: 联系人用户组
         userName:
           type: string
+          description: 联系人用户名
         userRemark:
           type: string
+          description: 处理人备注
       title: 告警VO
       x-apifox-orders:
         - aggregationGroup
