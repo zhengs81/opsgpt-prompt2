@@ -8,12 +8,12 @@ paths:
     get:
       summary: 获得告警详情
       deprecated: false
-      description: ''
+      description: '通过告警数据的主键ID获取告警详情，主要包括告警正文、告警指标、相关业务系统等信息'
       operationId: getAlertDetailsByAlertIDUsingGET
       parameters:
         - name: id
           in: path
-          description: 主键id
+          description: 主键ID
           required: true
           example: ''
           schema:
@@ -63,7 +63,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2797460/apis/api-85031881-run
   /api/venus/v1/alert/trace/{id}:
     post:
-      summary: 获得告警轨迹
+      summary: 通过告警数据主键，获取某个告警的处理轨迹，即历史的告警操作列表，列表中每一个操作包含告警开始和恢复时间、操作类型、告警状态等信息
       deprecated: false
       description: ''
       operationId: getAlertTraceUsingPOST
@@ -135,7 +135,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2797460/apis/api-85031900-run
   /api/venus/v1/analysis/record/{id}:
     get:
-      summary: 查询分析结果
+      summary: 通过告警的配置ID查询相关分析结果，主要包含分析的状态、开始结束时间、分析的报表对象、报表的开始结束时间等信息
       deprecated: false
       description: ''
       operationId: oneUsingGET
@@ -202,7 +202,7 @@ components:
           example: 0
         data:
           $ref: '#/components/schemas/AnalysisRecordVO'
-          description: 警告详情
+          description: 告警分析详情
         msg:
           type: string
           description: 错误信息
@@ -305,7 +305,7 @@ components:
           example: 0
         data:
           type: array
-          description: 数据
+          description: 告警轨迹数据
           items:
             $ref: '#/components/schemas/AlertOpRecordVo'
         msg:

@@ -31,6 +31,7 @@ Thought: I now know the final answer. User can't see any of my observations, API
 Final Answer: 具有适当细节的原始输入问题的最终答案
 
 The "Action Input" must include information about your intention instead of simple data either short instruction.
+The "Action Input" must mentioned "Thought" and "Question" may want to know or to do with the following "Action".
 When responding with your Final Answer, remember that the person you are responding to CANNOT see any of your Thought/Action/Action Input/Observations, so if there is any relevant information there you need to include it explicitly in your response. 
 
 Important!!! when you think you know the final answer, please always translate your answer into Chinese.
