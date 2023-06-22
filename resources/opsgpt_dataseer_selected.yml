@@ -8,7 +8,7 @@ servers:
 paths:
   /api/metrics-center/v1/metrics/timeseries:
     post:
-      summary: 指标时序数据查询
+      summary: 用于查询一段时间内的指标时序数据，包含指标代码和唯一键，必须输入起止时间，页面信息及聚合粒度(s)
       deprecated: false
       description: ''
       requestBody:
@@ -171,7 +171,7 @@ paths:
                     nullable: true
                   data:
                     type: object
-                    description: 指标基本信息
+                    description: 指标时序数据
                     properties:
                       currentPage:
                         type: integer
@@ -191,7 +191,7 @@ paths:
                               description: A：指标：维度
                             metriCode:
                               type: string
-                              title: 指标code
+                              title: 指标代码
                             metricNameCn:
                               type: string
                               title: 指标中文名
@@ -259,14 +259,14 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/1526839/apis/api-37155809-run
   /api/dataplat-backendservice/portal/metric/data_serve_list/{metricId}:
     get:
-      summary: 指标资产-服务列表
+      summary: 用于查询指标ID对应的数据门户服务列表，包含创建时间和授权列表，必须输入指标ID
       deprecated: false
-      description: '输入指标ID，返回一个输入指标ID相关的数据服务或接口列表'
+      description: '用于查询指标ID对应的数据门户服务列表，包含创建时间和授权列表，必须输入指标ID'
       operationId: findMetricDataServeListUsingGET
       parameters:
         - name: metricId
           in: path
-          description: 指标id
+          description: 指标ID
           required: true
           example: ''
           schema:
@@ -309,7 +309,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/1516247/apis/api-36566476-run
   /api/dataplat-backendservice/portal/metric/basic-info:
     post:
-      summary: 门户-指标基本信息
+      summary: 用于查询数据门户指标详情，包含业务系统及指标业务分类，测量名称和指标名称为必填项
       deprecated: false
       description: ''
       operationId: basicInfoUsingPOST_1
@@ -509,8 +509,10 @@ components:
       properties:
         measurementName:
           type: string
+          description: 测量名称
         metricCode:
           type: string
+          description: 指标名称
       title: MetricBaseQuery
       x-apifox-orders:
         - measurementName
