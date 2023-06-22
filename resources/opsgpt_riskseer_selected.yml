@@ -9,7 +9,7 @@ tags:
 paths:
   /api/risk-seer-service/v1/inspection/item/fetch:
     get:
-      summary: 根据检查项ID查询检查项详情
+      summary: 根据检查项ID查询检查项详情，包含检查项名称和分类，检查项ID为必填项
       x-apifox-folder: 检查项管理接口
       x-apifox-status: released
       deprecated: false
@@ -20,7 +20,7 @@ paths:
       parameters:
         - name: id
           in: query
-          description: id
+          description: 检查项ID
           required: true
           example: ''
           schema:
@@ -450,7 +450,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2858328/apis/api-87946302-run
   /api/risk-seer-service/v1/inspection/item/page/fetch:
     post:
-      summary: 检查项搜索接口
+      summary: 用于对检查项的基础信息进行分页查询，包含总检查项数量和总分页数，可对检查项分类，检测值类型，重要性类别，起始创建时间，起始更新时间进行查询，以及对检查项名称进行模糊查询
       x-apifox-folder: 检查项管理接口
       x-apifox-status: released
       deprecated: false
@@ -489,11 +489,11 @@ paths:
                       format: int32
                     beginCreateTime:
                       type: string
-                      description: 创建时间开始（支持创建时间范围查询）
+                      description: 起始创建时间（支持创建时间范围查询）
                       format: date-time
                     beginUpdateTime:
                       type: string
-                      description: 更新时间开始（支持更新时间范围查询）
+                      description: 起始更新时间（支持更新时间范围查询）
                       format: date-time
                   required: []
               x-apifox-orders:
@@ -779,7 +779,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2858328/apis/api-87946304-run
   /api/risk-seer-service/v1/task/execute:
     post:
-      summary: 手动任务执行
+      summary: 可根据检查时间，变更开始时间，变更结束时间及同周期基准时间任何一项查询任务并手动执行，返回响应码，响应信息及任务实例ID
       x-apifox-folder: 任务管理接口
       x-apifox-status: released
       deprecated: false
@@ -1227,7 +1227,7 @@ components:
           description: 响应信息
         results:
           type: object
-          description: 返回结果
+          description: 检查项详情/任务实例ID
           x-apifox-orders:
             - id
             - inspectionItemName
@@ -1410,7 +1410,7 @@ components:
           description: 响应信息
         results:
           type: object
-          description: 返回结果
+          description: 检查项基础信息的分页查询结果
           properties:
             current:
               type: integer

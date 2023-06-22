@@ -333,7 +333,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85579847-run
   /api/forest/v1/failure/manual/silent:
     put:
-      summary: 创建静默手动排障任务-单实例-广发
+      summary: 用于创建静默手动执行的排障任务, 包含排查起止时间, 对象编码及实例编码, 必须输入排查起止时间及实例编码
       deprecated: false
       description: ''
       requestBody:
@@ -353,7 +353,7 @@ paths:
                   description: 对象编码
                 instanceCode:
                   type: string
-                  description: 实例Code
+                  description: 实例编码
                 eventTypeList:
                   type: array
                   items:
@@ -614,7 +614,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85579837-run
   /api/forest/v1/failure/info/{code}:
     get:
-      summary: 根据疑似故障编码code【唯一标识】，查询疑似故障详情
+      summary: 通过输入疑似故障编码从而查询疑似故障详情, 疑似故障编码为必填项
       deprecated: false
       description: ''
       parameters:
@@ -882,7 +882,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85579845-run
   /api/forest/v1/failure/alert_code_to_failure/list:
     post:
-      summary: 通过告警编码列表查询告警编码对应的故障信息列表
+      summary: 通过告警编码列表查询其对应的故障信息列表, 告警编码列表, 当前页面及页面大小为必填项
       deprecated: false
       description: ''
       requestBody:
@@ -1127,7 +1127,7 @@ paths:
       x-run-in-apifox: https://apifox.com/web/project/2808302/apis/api-85924017-run
   /api/forest/v1/failure/root/cause/analysis:
     post:
-      summary: 应急事件信息-根因分析接口
+      summary: 用于查询应急事件的根因分析, 告警编码, 应用系统编码及应用系统名称三选一必填
       deprecated: false
       description: ''
       requestBody:
