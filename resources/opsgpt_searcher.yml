@@ -146,8 +146,7 @@ components:
           example: success
         results:
           title: 响应结果
-          allOf:
-            - $ref: '#/components/schemas/InstanceResult'
+          $ref: '#/components/schemas/InstanceResult'
           description: 搜索到的相关实例结果数据
     InstanceResult:
       title: InstanceResult
@@ -221,8 +220,7 @@ components:
           example: success
         results:
           title: 响应结果
-          allOf:
-            - $ref: '#/components/schemas/InstanceTypeResult'
+          $ref: '#/components/schemas/InstanceTypeResult'
           description: 搜索到的相关对象结果数据
     InstanceTypeResult:
       title: InstanceTypeResult
